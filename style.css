@@ -1,0 +1,52 @@
+h1 {
+    color: whitesmoke;
+    font-family: Herculanum;
+    font-size: 75px;
+}
+body {
+    background-size: 100% 100%;
+    background-attachment: fixed;
+
+}
+#navigation-container {
+    top: 200px;
+    left: 325px;
+    height: 100%;
+    width: 250px;
+    position: fixed;
+    display: block;
+}
+#content-container {
+    display: inline-block;
+    border: black thick;
+    position: absolute;
+    top: 100px;
+    right: 100px;
+}
+#content-container form p {
+    font-family: Gill Sans, sans-serif;
+    font-size: larger;
+    color: #362f1e;
+    display: block;
+    width: 100%;
+}
+
+#content-container form input {
+}
+#next {
+    justify-content: center;
+    position:absolute;
+    display: block;
+    right: 350px;
+    bottom: 250px;
+    padding: 10px 32px;
+    text-align: center;
+    border-radius: 10px;
+    background-color: white;
+    border-color: white;
+}
+
+ul li{
+    color: #e7e70b;
+    font-family: Herculanum;
+}
