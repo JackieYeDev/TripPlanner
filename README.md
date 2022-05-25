@@ -52,7 +52,7 @@ Below are the iterations of wireframe concepts for this application:
 ---
 
 #### Landing Page
-![Landing Page](images/User-Interface-Design-1.png)
+![Landing Page](images/Phase-1-SPA-Wireframe-2.jpg)
 
 #### Form Page
-![Form Page](images/User-Interface-Design-2.png)
+![Form Page](images/Phase-1-SPA-Wireframe-3.jpg)
