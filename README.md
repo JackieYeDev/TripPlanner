@@ -64,3 +64,6 @@ Below are the iterations of wireframe concepts for this application:
 
 1) Background
    - https://gallery.yopriceville.com/Backgrounds/Summer_Sunrise_Background#.Yo3KMy-B1nQ
+
+2) SummerLoving Font
+   - https://www.dafont.com/summerloving.font

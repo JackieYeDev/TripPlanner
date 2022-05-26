@@ -7,15 +7,26 @@
     format("herculanum");
 }
 
+@font-face {
+    font-family: SummerLoving;
+    src: url("fonts/SummerLoving.otf");
+    format("summerloving");
+}
+
 /*
     Effects
  */
 
 h1 {
-    color: whitesmoke;
-    font-family: Herculanum;
-    font-size: 75px;
+    color: #ffffff;
+    font-family: SummerLoving;
+    font-size: 125px;
 }
+/*h1 {*/
+/*    color: whitesmoke;*/
+/*    font-family: Herculanum;*/
+/*    font-size: 75px;*/
+/*}*/
 body {
     background-size: 100% 100%;
     background-attachment: fixed;
