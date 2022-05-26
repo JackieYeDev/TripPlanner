@@ -44,11 +44,19 @@ body {
     display: block;
     right: 350px;
     bottom: 250px;
-    padding: 10px 32px;
-    text-align: center;
+    /* Round out the button */
     border-radius: 10px;
+    border: 1px solid silver;
+    /* Color schema for button */
     background-color: white;
-    border-color: white;
+    opacity: 95%;
+    /* Button dimensions */
+    width: 250px;
+    height: 50px;
+    /* Font styling inside button */
+    text-align: center;
+    font-family: monospace;
+    font-weight: bolder;
 }
 
 ul li{
