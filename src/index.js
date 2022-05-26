@@ -75,11 +75,10 @@ document.addEventListener("DOMContentLoaded", init);
 */
 
 const createNav = function (days, container) {
-    if (!days) return false;
+    if (days === false) return false;
     const messageBar = document.querySelector('#message-bar');
     messageBar.innerHTML = ""
     const numberOfDays = days;
-    console.log(numberOfDays)
     for(let i=0; i <= numberOfDays; i++) {
         const li = document.createElement('li');
         const h2 = document.createElement('h2');
@@ -89,6 +88,46 @@ const createNav = function (days, container) {
     }
 };
 
+const createFormForDay = function () {
+    const table = document.createElement('table');
+    const form = document.querySelector('div#content-container form')
+    createFlightDetails(table);
+    createHotelDetails(table);
+
+    form.append(table);
+};
+
+const createFlightDetails = function (table) {
+    const headerRow = document.createElement('tr');
+    const tableRow = document.createElement('tr');
+    const tdSearchBar = document.createElement('td');
+    const tdAddButton = document.createElement('td');
+
+    headerRow.innerHTML = '<th colspan="2"><u>Add Flight</u></th>';
+    tdSearchBar.innerHTML = '<input type="text">';
+    tdAddButton.innerHTML = '<input type="button" value="Add Flight">';
+
+    tableRow.append(tdSearchBar, tdAddButton);
+
+    return table.append(headerRow, tableRow);
+}
+
+
+const createHotelDetails = function (table) {
+    const headerRow = document.createElement('tr');
+    const tableRow = document.createElement('tr');
+    const tdSearchBar = document.createElement('td');
+    const tdAddButton = document.createElement('td');
+
+    headerRow.innerHTML = '<th colspan="2"><u>Add Hotel</u></th>';
+    tdSearchBar.innerHTML = '<input type="text">';
+    tdAddButton.innerHTML = '<input type="button" value="Add Hotel">';
+
+    tableRow.append(tdSearchBar, tdAddButton);
+
+    return table.append(headerRow, tableRow);
+}
+
 /**
  * Fades Out and Deletes HTML Elements
  *
@@ -97,7 +136,7 @@ const createNav = function (days, container) {
  */
 const fadeOutEffect = function (...elements) {
     //let form = elements
-    let form = document.querySelector('input#startDate');
+    const form = document.querySelector('input');
     let intervalID = setInterval(function () {
         if(!form.style.opacity) {
             form.style.opacity = 1;
@@ -107,9 +146,17 @@ const fadeOutEffect = function (...elements) {
         }
         else {
             clearInterval(intervalID);
-            form.remove();
+            form.innerHTML = '';
+            createFormForDay();
         }
     }, 200);
+}
+
+/*
+https://css-tricks.com/fly-in-newly-added-content-to-a-page/
+ */
+const flyInEffect = function () {
+
 }
 
 const countNumberOfDays = (startDate, endDate) =>
