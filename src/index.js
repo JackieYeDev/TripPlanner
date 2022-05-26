@@ -54,16 +54,73 @@ function init() {
         if(startDate.value === "" || endDate.value === "") {
             return false;
         }
-        let duration = [startDate, endDate];
-        duration.forEach(function (date) {
-            const li = document.createElement('li');
-            const h4 = document.createElement('h4');
-            console.log(date)
-            h4.innerText = date.value;
-            li.appendChild(h4);
-            tocContainer.appendChild(li);
-        });
+        const duration = [startDate, endDate];
+        // duration.forEach(function (date) {
+        //     const li = document.createElement('li');
+        //     const h4 = document.createElement('h4');
+        //     console.log(date)
+        //     h4.innerText = date.value;
+        //     li.appendChild(h4);
+        //     tocContainer.appendChild(li);
+        // });
+        fadeOutEffect(form);
+        createNav(checkErrors(startDate, endDate), tocContainer);
     });
 }
 
 document.addEventListener("DOMContentLoaded", init);
+
+/*
+*  RENDER FORM AFTER BUTTON CLICKED
+*/
+
+const createNav = function (days, container) {
+    if (!days) return false;
+    const messageBar = document.querySelector('#message-bar');
+    messageBar.innerHTML = ""
+    const numberOfDays = days;
+    console.log(numberOfDays)
+    for(let i=0; i <= numberOfDays; i++) {
+        const li = document.createElement('li');
+        const h2 = document.createElement('h2');
+        h2.innerText = `Day ${i+1}`;
+        li.appendChild(h2);
+        container.appendChild(li);
+    }
+};
+
+/**
+ * Fades Out and Deletes HTML Elements
+ *
+ * Reference for Fade Out Effect:
+ * {@link https://www.geeksforgeeks.org/how-to-add-fade-out-effect-using-pure-javascript/}
+ */
+const fadeOutEffect = function (...elements) {
+    //let form = elements
+    let form = document.querySelector('input#startDate');
+    let intervalID = setInterval(function () {
+        if(!form.style.opacity) {
+            form.style.opacity = 1;
+        }
+        if(form.style.opacity > 0) {
+            form.style.opacity -= 0.1;
+        }
+        else {
+            clearInterval(intervalID);
+            form.remove();
+        }
+    }, 200);
+}
+
+const countNumberOfDays = (startDate, endDate) =>
+    ((Date.parse(endDate.valueAsDate) - Date.parse(startDate.valueAsDate))/(1000 * 3600 * 24));
+
+const checkErrors = function (start, end) {
+    const days = countNumberOfDays(start, end)
+    if (days < 0) {
+        const messageBar = document.querySelector('#message-bar');
+        messageBar.innerHTML = '<span> Please enter a valid start and end date! </span>';
+    } else {
+        return days;
+    }
+}
