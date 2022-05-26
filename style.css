@@ -1,8 +1,16 @@
+/*
+    Fonts
+*/
 @font-face {
     font-family: Herculanum;
     src: url("fonts/Herculanum.ttf")
     format("herculanum");
 }
+
+/*
+    Effects
+ */
+
 h1 {
     color: whitesmoke;
     font-family: Herculanum;
@@ -13,13 +21,28 @@ body {
     background-attachment: fixed;
 
 }
+/*
+    Message bar
+*/
+#message-bar {
+    z-index: 1;
+    opacity: 75%;
+    width: 100%;
+    /* Font Style */
+    background-color: white;
+    font-size: 18px;
+    font-family: monospace;
+    color: red;
+}
+
 #navigation-container {
     top: 200px;
     left: 325px;
-    height: 100%;
+    height: 550px;
     width: 250px;
     position: fixed;
     display: block;
+    overflow: scroll;
 }
 #content-container {
     display: inline-block;
@@ -54,12 +77,19 @@ body {
     width: 250px;
     height: 50px;
     /* Font styling inside button */
+    font-size: 14px;
     text-align: center;
     font-family: monospace;
     font-weight: bolder;
 }
 
 ul li{
-    color: #e7e70b;
+    /*color: #e7e70b;*/
+    color: #cc9044;
     font-family: Herculanum;
+}
+ul li :hover{
+    /*color: #e7e70b;*/
+    background-color: #1e1b18;
+    opacity: 85%;
 }
