@@ -42,7 +42,7 @@ body {
     width: 250px;
     position: fixed;
     display: block;
-    overflow: scroll;
+    overflow: hidden;
 }
 #content-container {
     display: inline-block;
