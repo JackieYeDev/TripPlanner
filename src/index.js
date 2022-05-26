@@ -6,6 +6,7 @@ function init() {
     // Declare Containers
     const formContainer = document.querySelector('div#content-container');
     const tocContainer = document.querySelector('ul#toc-container');
+    const messageBar = document.querySelector('#message-bar');
 
     // Create Title of Application
     const titleP = document.createElement('p');
@@ -31,14 +32,14 @@ function init() {
     startDate.type = 'date';
     startDate.innerHTML.concat(" required");
     labelStartDate.setAttribute('for', 'startDate');
-    labelStartDate.innerText = 'Start Date: ';
+    labelStartDate.innerText = 'Start Date:';
     startP.append(labelStartDate, startDate);
 
     endDate.id = 'endDate';
     endDate.type = 'date';
     endDate.innerHTML.concat(" required");
     labelEndDate.setAttribute('for', 'endDate');
-    labelEndDate.innerText = 'End Date: ';
+    labelEndDate.innerText = 'End Date:';
     endP.append(labelEndDate, endDate);
 
     // Append Form Items
@@ -52,6 +53,7 @@ function init() {
         e.preventDefault();
         // Prevent Empty Input
         if(startDate.value === "" || endDate.value === "") {
+            messageBar.innerHTML = '<span> Please enter a valid start and end date! </span>';
             return false;
         }
         const duration = [startDate, endDate];
@@ -63,7 +65,7 @@ function init() {
         //     li.appendChild(h4);
         //     tocContainer.appendChild(li);
         // });
-        fadeOutEffect(form);
+        fadeOutEffect(startDate, labelStartDate, endDate, labelEndDate);
         createNav(checkErrors(startDate, endDate), tocContainer);
     });
 }
@@ -136,20 +138,36 @@ const createHotelDetails = function (table) {
  */
 const fadeOutEffect = function (...elements) {
     //let form = elements
-    const form = document.querySelector('input');
-    let intervalID = setInterval(function () {
-        if(!form.style.opacity) {
-            form.style.opacity = 1;
-        }
-        if(form.style.opacity > 0) {
-            form.style.opacity -= 0.1;
-        }
-        else {
-            clearInterval(intervalID);
-            form.innerHTML = '';
-            createFormForDay();
-        }
-    }, 200);
+    elements.map((e) => {
+        let intervalID = setInterval(function () {
+            if(!e.style.opacity) {
+                e.style.opacity = 1;
+            }
+            if(e.style.opacity > 0) {
+                e.style.opacity -= 0.1;
+            }
+            else {
+                clearInterval(intervalID);
+                e.remove();
+            }
+        }, 200);
+    });
+
+    createFormForDay();
+    // const form = document.querySelector('input');
+    // let intervalID = setInterval(function () {
+    //     if(!form.style.opacity) {
+    //         form.style.opacity = 1;
+    //     }
+    //     if(form.style.opacity > 0) {
+    //         form.style.opacity -= 0.1;
+    //     }
+    //     else {
+    //         clearInterval(intervalID);
+    //         form.innerHTML = '';
+    //         createFormForDay();
+    //     }
+    // }, 200);
 }
 
 /*
