@@ -1,3 +1,70 @@
+class Trip {
+    constructor(name, days = []) {
+        this.id = Math.floor(Math.random() * 1000000);
+        this.name = name || "";
+        this.days = days;
+    }
+
+    getId() {
+        tripID = this.id;
+    }
+
+    getName() {
+        console.log(this.name);
+    }
+    setName(name) {
+        this.name = name;
+    }
+
+    getDays() {
+        console.log(this.days.length);
+    }
+    setDays(Day) {
+        this.days.push(Day);
+    }
+}
+
+class Day {
+    constructor(day, activity = []) {
+        this.day = parseInt(day);
+        this.activity = activity;
+        this.ref = tripID || null;
+    }
+
+    getDay() {
+        console.log(this.activity);
+    }
+
+    setActivity(Activity) {
+        this.activity.push(Activity);
+    }
+}
+
+class Activity {
+    constructor(start, end, description) {
+        this.activityID = Math.floor(Math.random() * 1000000);
+        this.start = start;
+        this.end = end;
+        this.description = description;
+        this.ref = tripID || null;
+    }
+
+    getActivity() {
+        return {
+            "id": this.activityID,
+            "start":this.start,
+            "end": this.end,
+            "description": this.description
+        }
+    }
+
+    setDay(Day) {
+        Day.setActivity(this.getActivity());
+    }
+}
+
+let tripID = 0;
+
 document.addEventListener("DOMContentLoaded", init);
 
 function init() {
@@ -32,14 +99,12 @@ function init() {
 
     startDate.id = 'startDate';
     startDate.type = 'date';
-    startDate.innerHTML.concat(" required");
     labelStartDate.setAttribute('for', 'startDate');
     labelStartDate.innerText = 'Start Date:';
     startP.append(labelStartDate, startDate);
 
     endDate.id = 'endDate';
     endDate.type = 'date';
-    endDate.innerHTML.concat(" required");
     labelEndDate.setAttribute('for', 'endDate');
     labelEndDate.innerText = 'End Date:';
     endP.append(labelEndDate, endDate);
@@ -59,9 +124,10 @@ function init() {
             return false;
         }
         const duration = [startDate, endDate];
+        const numberOfDays = countNumberOfDays(startDate, endDate);
 
         createNav(checkErrors(startDate, endDate), tocContainer);
-        createForm(nextButton, startP, endP);
+        createForm(numberOfDays, nextButton, startP, endP);
     });
 }
 
@@ -81,7 +147,7 @@ const createNav = function (days, container) {
         container.appendChild(li);
     }
 };
-const createForm = function (button, ...elements) {
+const createForm = function (days, button, ...elements) {
     // Remove unnecessary elements
     [...elements].forEach((e) => e.remove());
 
@@ -96,6 +162,16 @@ const createForm = function (button, ...elements) {
 
     // Modify Next Button
     button.innerText = "Next Day";
+
+    const daysArray = [];
+
+    for(let i=0; i <= days; i++) {
+        const day = new Day(i+1, []);
+        daysArray.push(day);
+    }
+
+    // const trip = new Trip( "Miami", daysArray);
+    // trip.getDays();
 
 };
 
