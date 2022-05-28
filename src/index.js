@@ -61,9 +61,9 @@ function init() {
         const duration = [startDate, endDate];
 
         createNav(checkErrors(startDate, endDate), tocContainer);
-        createForm(startP, endP);
+        createForm(nextButton, startP, endP);
     });
-};
+}
 
 /*
 *  RENDER FORM AFTER BUTTON CLICKED
@@ -81,7 +81,7 @@ const createNav = function (days, container) {
         container.appendChild(li);
     }
 };
-const createForm = function (...elements) {
+const createForm = function (button, ...elements) {
     // Remove unnecessary elements
     [...elements].forEach((e) => e.remove());
 
@@ -94,6 +94,9 @@ const createForm = function (...elements) {
     // Add Activity Form
     createActivityForm();
 
+    // Modify Next Button
+    button.innerText = "Next Day";
+
 };
 
 const createFlightForm = function () {
@@ -105,10 +108,6 @@ const createFlightForm = function () {
     flightInput.placeholder = 'Enter your flight number here';
     flightAddButton.className = 'btn btn-outline-primary mb-3';
     flightAddButton.innerText = 'Add Flight';
-    flightAddButton.addEventListener('click',function (e) {
-        e.preventDefault();
-        console.log('Flight was clicked.');
-    });
     divForm.className = 'mb-3';
     flightForm.className = 'row g-3';
 
@@ -119,6 +118,19 @@ const createFlightForm = function () {
         flightForm.appendChild(div);
     });
 
+    flightForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const detailsContainer = document.querySelector('div#details-container');
+        const h5 = document.createElement('h5');
+        const p = document.createElement('p');
+
+        h5.innerHTML = '<u>Flight Information</u>';
+        p.innerText = flightInput.value;
+
+        detailsContainer.append(h5, p);
+
+        flightForm.reset();
+    })
 
     divForm.appendChild(flightForm);
 
@@ -134,10 +146,6 @@ const createHotelForm = function () {
     hotelInput.placeholder = 'Enter your hotel name here';
     hotelAddButton.className = 'btn btn-outline-primary mb-3';
     hotelAddButton.innerText = 'Add Hotel';
-    hotelAddButton.addEventListener('click',function (e) {
-        e.preventDefault();
-        console.log('Hotel was clicked.');
-    });
     divForm.className = 'mb-3';
     hotelForm.className = 'row g-3';
 
@@ -148,6 +156,19 @@ const createHotelForm = function () {
         hotelForm.appendChild(div);
     });
 
+    hotelForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const detailsContainer = document.querySelector('div#details-container');
+        const h5 = document.createElement('h5');
+        const p = document.createElement('p');
+
+        h5.innerHTML = '<u>Hotel Information</u>';
+        p.innerText = hotelInput.value;
+
+        detailsContainer.append(h5, p);
+
+        hotelForm.reset();
+    });
 
     divForm.appendChild(hotelForm);
 
@@ -165,14 +186,18 @@ const createActivityForm = function () {
     activityInput.placeholder = 'Type your activity in here.';
     activityAddButton.className = 'btn btn-outline-primary mb-3';
     activityAddButton.innerText = 'Add Activity';
-    activityAddButton.addEventListener('click', function (e) {
-        e.preventDefault();
-        console.log('Activity was clicked.');
-    });
     divForm.className = 'mb-3';
     activityForm.className = 'row g-3';
-    startInput.placeholder = 'Start time of activity';
-    endInput.placeholder = 'End time of activity';
+    startInput.placeholder = 'Start time [HHMM]';
+    startInput.type = 'number';
+    startInput.min = '0000'
+    startInput.max = '2400';
+    startInput.step = '10';
+    endInput.placeholder = 'End time [HHMM]';
+    endInput.type = 'number';
+    endInput.min = '0000';
+    endInput.max = '2400';
+    endInput.step = '10';
 
     [activityInput, activityAddButton].map(function (e) {
         const div = document.createElement('div');
@@ -188,6 +213,19 @@ const createActivityForm = function () {
         activityForm.appendChild(div);
     });
 
+    activityForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const detailsContainer = document.querySelector('div#details-container');
+        const h5 = document.createElement('h5');
+        const p = document.createElement('p');
+
+        h5.innerHTML = `<u>${startInput.value} - ${endInput.value}</u>`;
+        p.innerText = `${activityInput.value}`;
+
+        detailsContainer.append(h5, p);
+
+        activityForm.reset();
+    });
 
     divForm.appendChild(activityForm);
 

@@ -47,14 +47,21 @@ body {
 }
 
 #navigation-container {
-    top: 200px;
-    left: 325px;
-    height: 550px;
-    width: 250px;
+    top: 5%;
+    left: 5%;
+    max-width: 40%;
+    max-height: 40%;
     position: fixed;
     display: block;
-    overflow: hidden;
+    overflow: scroll;
+    opacity: 75%;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
+#navigation-container::-webkit-scrollbar {
+    display: none;
+}
+
 #content-container {
     display: inline-block;
     border: black thick;
@@ -70,8 +77,22 @@ body {
     width: 100%;
 }
 
-#content-container form input {
+#details-container {
+    color: white;
+    position: fixed;
+    bottom: 5%;
+    left: 5%;
+    max-height: 45%;
+    max-width: 40%;
+    overflow: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
+
+#details-container::-webkit-scrollbar {
+    display: none;
+}
+
 #next {
     justify-content: center;
     position:absolute;
@@ -100,11 +121,11 @@ ul {
 }
 ul li{
     /*color: #e7e70b;*/
-    color: #cc9044;
+    color: #ffffff;
     font-family: Herculanum;
 }
 ul li :hover{
     /*color: #e7e70b;*/
-    background-color: #1e1b18;
-    opacity: 85%;
+    background-color: #7e7e7e;
+    opacity: 50%;
 }
