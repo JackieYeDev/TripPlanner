@@ -94,6 +94,10 @@ body {
     font-weight: bolder;
 }
 
+ul {
+    background-color: rgba(180,176,170,0.05);
+    opacity: 100%;
+}
 ul li{
     /*color: #e7e70b;*/
     color: #cc9044;

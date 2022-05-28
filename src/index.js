@@ -1,3 +1,5 @@
+document.addEventListener("DOMContentLoaded", init);
+
 function init() {
     /*
      *  INIT OF LANDING PAGE
@@ -57,20 +59,11 @@ function init() {
             return false;
         }
         const duration = [startDate, endDate];
-        // duration.forEach(function (date) {
-        //     const li = document.createElement('li');
-        //     const h4 = document.createElement('h4');
-        //     console.log(date)
-        //     h4.innerText = date.value;
-        //     li.appendChild(h4);
-        //     tocContainer.appendChild(li);
-        // });
-        fadeOutEffect(startDate, labelStartDate, endDate, labelEndDate);
-        createNav(checkErrors(startDate, endDate), tocContainer);
-    });
-}
 
-document.addEventListener("DOMContentLoaded", init);
+        createNav(checkErrors(startDate, endDate), tocContainer);
+        createForm(startP, endP);
+    });
+};
 
 /*
 *  RENDER FORM AFTER BUTTON CLICKED
@@ -79,9 +72,8 @@ document.addEventListener("DOMContentLoaded", init);
 const createNav = function (days, container) {
     if (days === false) return false;
     const messageBar = document.querySelector('#message-bar');
-    messageBar.innerHTML = ""
-    const numberOfDays = days;
-    for(let i=0; i <= numberOfDays; i++) {
+    messageBar.innerHTML = "";
+    for(let i=0; i <= days; i++) {
         const li = document.createElement('li');
         const h2 = document.createElement('h2');
         h2.innerText = `Day ${i+1}`;
@@ -89,92 +81,117 @@ const createNav = function (days, container) {
         container.appendChild(li);
     }
 };
+const createForm = function (...elements) {
+    // Remove unnecessary elements
+    [...elements].forEach((e) => e.remove());
 
-const createFormForDay = function () {
-    const table = document.createElement('table');
-    const form = document.querySelector('div#content-container form')
-    createFlightDetails(table);
-    createHotelDetails(table);
+    // Add Flight Form
+    createFlightForm();
 
-    form.append(table);
+    // Add Hotel Form
+    createHotelForm();
+
+    // Add Activity Form
+    createActivityForm();
+
 };
 
-const createFlightDetails = function (table) {
-    const headerRow = document.createElement('tr');
-    const tableRow = document.createElement('tr');
-    const tdSearchBar = document.createElement('td');
-    const tdAddButton = document.createElement('td');
+const createFlightForm = function () {
+    const divForm = document.createElement('div');
+    const flightForm = document.createElement('form');
+    const flightInput = document.createElement('input');
+    const flightAddButton = document.createElement('button');
 
-    headerRow.innerHTML = '<th colspan="2"><u>Add Flight</u></th>';
-    tdSearchBar.innerHTML = '<input type="text">';
-    tdAddButton.innerHTML = '<input type="button" value="Add Flight">';
+    flightInput.placeholder = 'Enter your flight number here';
+    flightAddButton.className = 'btn btn-outline-primary mb-3';
+    flightAddButton.innerText = 'Add Flight';
+    flightAddButton.addEventListener('click',function (e) {
+        e.preventDefault();
+        console.log('Flight was clicked.');
+    });
+    divForm.className = 'mb-3';
+    flightForm.className = 'row g-3';
 
-    tableRow.append(tdSearchBar, tdAddButton);
-
-    return table.append(headerRow, tableRow);
-}
-
-
-const createHotelDetails = function (table) {
-    const headerRow = document.createElement('tr');
-    const tableRow = document.createElement('tr');
-    const tdSearchBar = document.createElement('td');
-    const tdAddButton = document.createElement('td');
-
-    headerRow.innerHTML = '<th colspan="2"><u>Add Hotel</u></th>';
-    tdSearchBar.innerHTML = '<input type="text">';
-    tdAddButton.innerHTML = '<input type="button" value="Add Hotel">';
-
-    tableRow.append(tdSearchBar, tdAddButton);
-
-    return table.append(headerRow, tableRow);
-}
-
-/**
- * Fades Out and Deletes HTML Elements
- *
- * Reference for Fade Out Effect:
- * {@link https://www.geeksforgeeks.org/how-to-add-fade-out-effect-using-pure-javascript/}
- */
-const fadeOutEffect = function (...elements) {
-    //let form = elements
-    elements.map((e) => {
-        let intervalID = setInterval(function () {
-            if(!e.style.opacity) {
-                e.style.opacity = 1;
-            }
-            if(e.style.opacity > 0) {
-                e.style.opacity -= 0.1;
-            }
-            else {
-                clearInterval(intervalID);
-                e.remove();
-            }
-        }, 200);
+    [flightInput, flightAddButton].map(function (e) {
+        const div = document.createElement('div');
+        div.className = 'col-auto';
+        div.appendChild(e);
+        flightForm.appendChild(div);
     });
 
-    createFormForDay();
-    // const form = document.querySelector('input');
-    // let intervalID = setInterval(function () {
-    //     if(!form.style.opacity) {
-    //         form.style.opacity = 1;
-    //     }
-    //     if(form.style.opacity > 0) {
-    //         form.style.opacity -= 0.1;
-    //     }
-    //     else {
-    //         clearInterval(intervalID);
-    //         form.innerHTML = '';
-    //         createFormForDay();
-    //     }
-    // }, 200);
-}
 
-/*
-https://css-tricks.com/fly-in-newly-added-content-to-a-page/
- */
-const flyInEffect = function () {
+    divForm.appendChild(flightForm);
 
+    document.querySelector('div#content-container').appendChild(divForm);
+};
+
+const createHotelForm = function () {
+    const divForm = document.createElement('div');
+    const hotelForm = document.createElement('form');
+    const hotelInput = document.createElement('input');
+    const hotelAddButton = document.createElement('button');
+
+    hotelInput.placeholder = 'Enter your hotel name here';
+    hotelAddButton.className = 'btn btn-outline-primary mb-3';
+    hotelAddButton.innerText = 'Add Hotel';
+    hotelAddButton.addEventListener('click',function (e) {
+        e.preventDefault();
+        console.log('Hotel was clicked.');
+    });
+    divForm.className = 'mb-3';
+    hotelForm.className = 'row g-3';
+
+    [hotelInput, hotelAddButton].map(function (e) {
+        const div = document.createElement('div');
+        div.className = 'col-auto';
+        div.appendChild(e);
+        hotelForm.appendChild(div);
+    });
+
+
+    divForm.appendChild(hotelForm);
+
+    document.querySelector('div#content-container').appendChild(divForm);
+};
+
+const createActivityForm = function () {
+    const divForm = document.createElement('div');
+    const activityForm = document.createElement('form');
+    const activityInput = document.createElement('input');
+    const activityAddButton = document.createElement('button');
+    const startInput = document.createElement('input');
+    const endInput = document.createElement('input');
+
+    activityInput.placeholder = 'Type your activity in here.';
+    activityAddButton.className = 'btn btn-outline-primary mb-3';
+    activityAddButton.innerText = 'Add Activity';
+    activityAddButton.addEventListener('click', function (e) {
+        e.preventDefault();
+        console.log('Activity was clicked.');
+    });
+    divForm.className = 'mb-3';
+    activityForm.className = 'row g-3';
+    startInput.placeholder = 'Start time of activity';
+    endInput.placeholder = 'End time of activity';
+
+    [activityInput, activityAddButton].map(function (e) {
+        const div = document.createElement('div');
+        div.className = 'col-auto';
+        div.appendChild(e);
+        activityForm.appendChild(div);
+    });
+
+    [startInput, endInput].map(function (e) {
+        const div = document.createElement('div');
+        div.className = 'col-auto';
+        div.appendChild(e);
+        activityForm.appendChild(div);
+    });
+
+
+    divForm.appendChild(activityForm);
+
+    document.querySelector('div#content-container').appendChild(divForm);
 }
 
 const countNumberOfDays = (startDate, endDate) =>
