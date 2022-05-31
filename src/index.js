@@ -46,7 +46,7 @@ class Activity {
         this.start = start;
         this.end = end;
         this.description = description;
-        this.tripID = tripID;
+        this.ref = tripID || null;
     }
 
     getActivity() {
@@ -55,7 +55,7 @@ class Activity {
             "start": this.start,
             "end": this.end,
             "description": this.description,
-            "tripID": this.tripID
+            "ref": this.ref
         }
     }
 
@@ -63,9 +63,9 @@ class Activity {
         Day.setActivity(this.getActivity());
     }
 
-    // setRef(id) {
-    //     this.ref = id;
-    // }
+    setRef(id) {
+        this.ref = id;
+    }
 }
 
 let tripID;
@@ -82,7 +82,7 @@ function init() {
     // Declare Containers
     const formContainer = document.querySelector('div#content-container');
     const tocContainer = document.querySelector('ul#toc-container');
-    const messageBar = document.querySelector('#message-bar');
+    const messageBar = document.querySelector('div#message-bar');
 
     // Create Title of Application
     const titleP = document.createElement('p');
@@ -97,47 +97,61 @@ function init() {
     form.id = "dates-form";
 
     // Create Fillable Inputs
-    const tripNameP = document.createElement('p');
+    const table = document.createElement('table');
+    const tbody = document.createElement('tbody');
+
+    table.className = 'table table-borderless';
+
     const tripNameInput = document.createElement('input');
     const tripNameLabel = document.createElement('label');
-    const startP = document.createElement('p');
-    const startDate = document.createElement('input');
-    const labelStartDate = document.createElement('label');
-    const endP = document.createElement('p');
-    const endDate = document.createElement('input');
-    const labelEndDate = document.createElement('label');
 
-    tripNameP.id = 'tripName';
     tripNameInput.type = 'text';
     tripNameLabel.setAttribute('for', 'tripName');
     tripNameLabel.innerText = 'Trip Name: ';
+
+    generateTableRows(tbody, tripNameLabel, tripNameInput);
+
+    const startDate = document.createElement('input');
+    const startDateLabel = document.createElement('label');
+
     startDate.id = 'startDate';
     startDate.type = 'date';
-    labelStartDate.setAttribute('for', 'startDate');
-    labelStartDate.innerText = 'Start Date:';
-    tripNameP.append(tripNameLabel, tripNameInput);
-    startP.append(labelStartDate, startDate);
+    startDateLabel.setAttribute('for', 'startDate');
+    startDateLabel.innerText = 'Start Date:';
+
+    generateTableRows(tbody, startDateLabel, startDate);
+
+    const endDate = document.createElement('input');
+    const endDateLabel = document.createElement('label');
 
     endDate.id = 'endDate';
     endDate.type = 'date';
-    labelEndDate.setAttribute('for', 'endDate');
-    labelEndDate.innerText = 'End Date:';
-    endP.append(labelEndDate, endDate);
+    endDateLabel.setAttribute('for', 'endDate');
+    endDateLabel.innerText = 'End Date:';
 
-    // Append Form Items
-    form.append(tripNameP, startP, endP);
+    generateTableRows(tbody, endDateLabel, endDate);
+
+    table.append(tbody);
+    form.append(table);
     formContainer.appendChild(form);
 
     // Set Attributes to Next Button
     const nextButton = document.querySelector('button#next');
     nextButton.textContent = "Begin Your Adventure!";
-    nextButton.addEventListener('click', function (e) {
+    const beginAdventure = function (e) {
         e.preventDefault();
         // Prevent Empty Input
         if(startDate.value === "" || endDate.value === "") {
-            messageBar.innerHTML = '<span> Please enter a valid start and end date! </span>';
+            messageBar.className = 'alert alert-danger';
+            messageBar.setAttribute('role','alert');
+            messageBar.innerText = 'Please enter a valid start and end date!';
             return false;
         }
+
+        messageBar.innerHTML = '';
+        messageBar.removeAttribute('class');
+        messageBar.removeAttribute('role');
+
         const duration = [startDate, endDate];
         const numberOfDays = countNumberOfDays(startDate, endDate);
 
@@ -146,9 +160,23 @@ function init() {
         day = 1;
 
         createNav(checkErrors(startDate, endDate), tocContainer);
-        createForm(numberOfDays, nextButton, tripNameP, startP, endP);
-    });
+        createForm(numberOfDays, nextButton, table);
+
+        nextButton.removeEventListener('click', beginAdventure);
+    }
+
+    nextButton.addEventListener('click', beginAdventure);
 }
+
+const generateTableRows = function (tbody, ...elements) {
+    const tr = document.createElement('tr');
+    elements.map(function (e) {
+        const td = document.createElement('td');
+        td.appendChild(e);
+        tr.appendChild(td);
+    })
+    tbody.appendChild(tr);
+};
 
 /*
 *  RENDER FORM AFTER BUTTON CLICKED
@@ -294,14 +322,14 @@ const createActivityForm = function () {
     endInput.max = '2400';
     endInput.step = '10';
 
-    [activityInput, activityAddButton].map(function (e) {
+    [startInput, endInput].map(function (e) {
         const div = document.createElement('div');
         div.className = 'col-auto';
         div.appendChild(e);
         activityForm.appendChild(div);
     });
 
-    [startInput, endInput].map(function (e) {
+    [activityInput, activityAddButton].map(function (e) {
         const div = document.createElement('div');
         div.className = 'col-auto';
         div.appendChild(e);
@@ -320,7 +348,6 @@ const createActivityForm = function () {
         detailsContainer.append(h5, p);
 
         const newActivity = new Activity(startInput.value, endInput.value, activityInput.value, tripID);
-        // newActivity.setRef(tripID);
 
         tripObj.days[day-1].activity.push(newActivity);
 

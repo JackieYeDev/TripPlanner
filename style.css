@@ -2,12 +2,6 @@
     Fonts
 */
 @font-face {
-    font-family: Herculanum;
-    src: url("fonts/Herculanum.ttf")
-    format("herculanum");
-}
-
-@font-face {
     font-family: SummerLoving;
     src: url("fonts/SummerLoving.otf");
     format("summerloving");
@@ -22,11 +16,7 @@ h1 {
     font-family: SummerLoving;
     font-size: 125px;
 }
-/*h1 {*/
-/*    color: whitesmoke;*/
-/*    font-family: Herculanum;*/
-/*    font-size: 75px;*/
-/*}*/
+
 body {
     background-size: 100% 100%;
     background-attachment: fixed;
@@ -35,16 +25,16 @@ body {
 /*
     Message bar
 */
-#message-bar {
-    z-index: 1;
-    opacity: 75%;
-    width: 100%;
-    /* Font Style */
-    background-color: white;
-    font-size: 18px;
-    font-family: monospace;
-    color: red;
-}
+/*#message-bar {*/
+/*    z-index: 1;*/
+/*    opacity: 75%;*/
+/*    width: 100%;*/
+/*    !* Font Style *!*/
+/*    background-color: white;*/
+/*    font-size: 18px;*/
+/*    font-family: monospace;*/
+/*    color: red;*/
+/*}*/
 
 #navigation-container {
     top: 5%;
@@ -69,7 +59,7 @@ body {
     top: 100px;
     right: 100px;
 }
-#content-container form p {
+#content-container form {
     font-family: Gill Sans, sans-serif;
     font-size: larger;
     color: #362f1e;
