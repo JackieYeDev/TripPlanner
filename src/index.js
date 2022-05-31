@@ -2,11 +2,11 @@ class Trip {
     constructor(name, days = []) {
         this.id = Math.floor(Math.random() * 1000000);
         this.name = name || "";
-        this.days = days;
+        this.days = days || [];
     }
 
     getId() {
-        tripID = this.id;
+        return this.id
     }
 
     getName() {
@@ -19,8 +19,8 @@ class Trip {
     getDays() {
         console.log(this.days.length);
     }
-    setDays(Day) {
-        this.days.push(Day);
+    setDays([...Day]) {
+        Day.forEach(e => this.days.push(e));
     }
 }
 
@@ -41,29 +41,36 @@ class Day {
 }
 
 class Activity {
-    constructor(start, end, description) {
+    constructor(start, end, description, tripID) {
         this.activityID = Math.floor(Math.random() * 1000000);
         this.start = start;
         this.end = end;
         this.description = description;
-        this.ref = tripID || null;
+        this.tripID = tripID;
     }
 
     getActivity() {
         return {
             "id": this.activityID,
-            "start":this.start,
+            "start": this.start,
             "end": this.end,
-            "description": this.description
+            "description": this.description,
+            "tripID": this.tripID
         }
     }
 
     setDay(Day) {
         Day.setActivity(this.getActivity());
     }
+
+    // setRef(id) {
+    //     this.ref = id;
+    // }
 }
 
-let tripID = 0;
+let tripID;
+let tripObj;
+let day;
 
 document.addEventListener("DOMContentLoaded", init);
 
@@ -90,6 +97,9 @@ function init() {
     form.id = "dates-form";
 
     // Create Fillable Inputs
+    const tripNameP = document.createElement('p');
+    const tripNameInput = document.createElement('input');
+    const tripNameLabel = document.createElement('label');
     const startP = document.createElement('p');
     const startDate = document.createElement('input');
     const labelStartDate = document.createElement('label');
@@ -97,10 +107,15 @@ function init() {
     const endDate = document.createElement('input');
     const labelEndDate = document.createElement('label');
 
+    tripNameP.id = 'tripName';
+    tripNameInput.type = 'text';
+    tripNameLabel.setAttribute('for', 'tripName');
+    tripNameLabel.innerText = 'Trip Name: ';
     startDate.id = 'startDate';
     startDate.type = 'date';
     labelStartDate.setAttribute('for', 'startDate');
     labelStartDate.innerText = 'Start Date:';
+    tripNameP.append(tripNameLabel, tripNameInput);
     startP.append(labelStartDate, startDate);
 
     endDate.id = 'endDate';
@@ -110,7 +125,7 @@ function init() {
     endP.append(labelEndDate, endDate);
 
     // Append Form Items
-    form.append(startP, endP);
+    form.append(tripNameP, startP, endP);
     formContainer.appendChild(form);
 
     // Set Attributes to Next Button
@@ -126,8 +141,12 @@ function init() {
         const duration = [startDate, endDate];
         const numberOfDays = countNumberOfDays(startDate, endDate);
 
+        tripObj = new Trip(tripNameInput.value);
+        tripID = tripObj.getId();
+        day = 1;
+
         createNav(checkErrors(startDate, endDate), tocContainer);
-        createForm(numberOfDays, nextButton, startP, endP);
+        createForm(numberOfDays, nextButton, tripNameP, startP, endP);
     });
 }
 
@@ -147,6 +166,7 @@ const createNav = function (days, container) {
         container.appendChild(li);
     }
 };
+
 const createForm = function (days, button, ...elements) {
     // Remove unnecessary elements
     [...elements].forEach((e) => e.remove());
@@ -170,8 +190,7 @@ const createForm = function (days, button, ...elements) {
         daysArray.push(day);
     }
 
-    // const trip = new Trip( "Miami", daysArray);
-    // trip.getDays();
+    tripObj.setDays(daysArray);
 
 };
 
@@ -299,6 +318,11 @@ const createActivityForm = function () {
         p.innerText = `${activityInput.value}`;
 
         detailsContainer.append(h5, p);
+
+        const newActivity = new Activity(startInput.value, endInput.value, activityInput.value, tripID);
+        // newActivity.setRef(tripID);
+
+        tripObj.days[day-1].activity.push(newActivity);
 
         activityForm.reset();
     });

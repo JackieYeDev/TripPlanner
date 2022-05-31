@@ -97,8 +97,8 @@ body {
     justify-content: center;
     position:absolute;
     display: block;
-    right: 350px;
-    bottom: 250px;
+    right: 15%;
+    bottom: 25%;
     /* Round out the button */
     border-radius: 10px;
     border: 1px solid silver;
