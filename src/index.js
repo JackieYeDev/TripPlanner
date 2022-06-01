@@ -338,7 +338,7 @@ const createHotelForm = function () {
         // p.innerText = hotelInput.value;
         //
         // detailsContainer.append(h5, p);
-        queryHotels()
+        queryHotels(hotelInput.value);
         hotelForm.reset();
     });
 
@@ -421,29 +421,30 @@ const checkErrors = function (start, end) {
     }
 }
 
-const foursquareAPIURL = `https://api.foursquare.com/v3/places/search?limit=5&query='Hotels'&near='New York,NY'&v=20220531`;
+/*
+*   Proxy Server for Trip Planner
+*/
+const proxyServerURL = `https://proxyservertripplanner.onrender.com/hotels/`;
 
 const configuration = {
     mode: "cors",
     method: "GET",
     headers: {
         Accept: "application/json",
-        Connection: "keep-alive",
-        'Access-Control-Allow-Origin':'*',
-        Authorization: '<INSERT API KEY>'
+        "Access-Control-Allow-Origin": "*"
     }
 }
 
-const queryHotels = async function () {
-    let jsonData =  await fetch('../test/res.json')
+const queryHotels = async function (query) {
+    // let jsonData =  await fetch('../test/res.json')
+    //     .then(response => response.json())
+    //     .then(data => data)
+    //     .catch(err => console.error(err));
+
+    let jsonData = await fetch(proxyServerURL+query, configuration)
         .then(response => response.json())
         .then(data => data)
         .catch(err => console.error(err));
-
-    // fetch(foursquareAPIURL, configuration)
-    //     .then(response => response.json())
-    //     .then(data => jsonData)
-    //     .catch(err => console.error(err));
 
     console.log(jsonData.results);
     createModal(jsonData.results);
