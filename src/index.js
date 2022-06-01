@@ -90,6 +90,7 @@ function init() {
     const formContainer = document.querySelector('div#content-container');
     const tocContainer = document.querySelector('ul#toc-container');
     const messageBar = document.querySelector('div#message-bar');
+    const loadContainer = document.querySelector('div#load-container');
 
     // Create Title of Application
     const titleP = document.createElement('p');
@@ -180,6 +181,40 @@ function init() {
     }
 
     nextButton.addEventListener('click', beginAdventure);
+
+    /*
+        IMPLEMENTATION OF LOAD WHEN JSON-SERVER IS SET UP
+     */
+
+    // const loadForm = document.createElement('form');
+    // const loadSelection = document.createElement('select');
+    // const loadButton = document.createElement('button');
+    //
+    // loadButton.type = 'submit';
+    // loadButton.className = 'btn btn-primary mb-3';
+    // loadButton.innerText = 'Load';
+    //
+    // loadSelection.className = 'form-select';
+    //
+    // const database = fetch(`http://localhost:8080`, {
+    //     method: "GET",
+    //     headers: {
+    //         "Content-Type": "application/json",
+    //         Accept: "application/json"
+    //     }
+    // })
+    //     .then(res => res.json())
+    //     .then(data => data)
+    //     .catch(err => "------------------");
+    //
+    // database.forEach(function (d) {
+    //     const loadOption = document.createElement('option');
+    //     loadOption.innerText = d;
+    //     loadSelection.appendChild(loadOption);
+    // });
+    //
+    // loadForm.append(loadSelection, loadButton);
+    // loadContainer.append(loadForm);
 }
 
 const generateTableRows = function (tbody, ...elements) {
