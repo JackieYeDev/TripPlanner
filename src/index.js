@@ -68,6 +68,13 @@ class Activity {
     }
 }
 
+class Hotel extends Activity {
+    constructor() {
+        super();
+
+    }
+}
+
 let tripID;
 let tripObj;
 let day;
@@ -106,6 +113,7 @@ function init() {
     const tripNameLabel = document.createElement('label');
 
     tripNameInput.type = 'text';
+    tripNameInput.required = 'true';
     tripNameLabel.setAttribute('for', 'tripName');
     tripNameLabel.innerText = 'Trip Name: ';
 
@@ -131,13 +139,19 @@ function init() {
 
     generateTableRows(tbody, endDateLabel, endDate);
 
+    const nextButton = document.createElement('button');
+
+    // nextButton.id = 'next';
+    nextButton.className = 'btn btn-outline-primary mb-3';
+    nextButton.innerText = "Begin Your Adventure!";
+
+    generateTableRows(tbody, nextButton);
+
     table.append(tbody);
     form.append(table);
     formContainer.appendChild(form);
 
     // Set Attributes to Next Button
-    const nextButton = document.querySelector('button#next');
-    nextButton.textContent = "Begin Your Adventure!";
     const beginAdventure = function (e) {
         e.preventDefault();
         // Prevent Empty Input
@@ -162,7 +176,7 @@ function init() {
         createNav(checkErrors(startDate, endDate), tocContainer);
         createForm(numberOfDays, nextButton, table);
 
-        nextButton.removeEventListener('click', beginAdventure);
+        // nextButton.removeEventListener('click', beginAdventure);
     }
 
     nextButton.addEventListener('click', beginAdventure);
@@ -200,7 +214,7 @@ const createForm = function (days, button, ...elements) {
     [...elements].forEach((e) => e.remove());
 
     // Add Flight Form
-    createFlightForm();
+    // createFlightForm();
 
     // Add Hotel Form
     createHotelForm();
@@ -222,43 +236,43 @@ const createForm = function (days, button, ...elements) {
 
 };
 
-const createFlightForm = function () {
-    const divForm = document.createElement('div');
-    const flightForm = document.createElement('form');
-    const flightInput = document.createElement('input');
-    const flightAddButton = document.createElement('button');
-
-    flightInput.placeholder = 'Enter your flight number here';
-    flightAddButton.className = 'btn btn-outline-primary mb-3';
-    flightAddButton.innerText = 'Add Flight';
-    divForm.className = 'mb-3';
-    flightForm.className = 'row g-3';
-
-    [flightInput, flightAddButton].map(function (e) {
-        const div = document.createElement('div');
-        div.className = 'col-auto';
-        div.appendChild(e);
-        flightForm.appendChild(div);
-    });
-
-    flightForm.addEventListener('submit', function (e) {
-        e.preventDefault();
-        const detailsContainer = document.querySelector('div#details-container');
-        const h5 = document.createElement('h5');
-        const p = document.createElement('p');
-
-        h5.innerHTML = '<u>Flight Information</u>';
-        p.innerText = flightInput.value;
-
-        detailsContainer.append(h5, p);
-
-        flightForm.reset();
-    })
-
-    divForm.appendChild(flightForm);
-
-    document.querySelector('div#content-container').appendChild(divForm);
-};
+// const createFlightForm = function () {
+//     const divForm = document.createElement('div');
+//     const flightForm = document.createElement('form');
+//     const flightInput = document.createElement('input');
+//     const flightAddButton = document.createElement('button');
+//
+//     flightInput.placeholder = 'Enter your flight number here';
+//     flightAddButton.className = 'btn btn-outline-primary mb-3';
+//     flightAddButton.innerText = 'Add Flight';
+//     divForm.className = 'mb-3';
+//     flightForm.className = 'row g-3';
+//
+//     [flightInput, flightAddButton].map(function (e) {
+//         const div = document.createElement('div');
+//         div.className = 'col-auto';
+//         div.appendChild(e);
+//         flightForm.appendChild(div);
+//     });
+//
+//     flightForm.addEventListener('submit', function (e) {
+//         e.preventDefault();
+//         const detailsContainer = document.querySelector('div#details-container');
+//         const h5 = document.createElement('h5');
+//         const p = document.createElement('p');
+//
+//         h5.innerHTML = '<u>Flight Information</u>';
+//         p.innerText = flightInput.value;
+//
+//         detailsContainer.append(h5, p);
+//
+//         flightForm.reset();
+//     })
+//
+//     divForm.appendChild(flightForm);
+//
+//     document.querySelector('div#content-container').appendChild(divForm);
+// };
 
 const createHotelForm = function () {
     const divForm = document.createElement('div');
@@ -268,7 +282,7 @@ const createHotelForm = function () {
 
     hotelInput.placeholder = 'Enter your hotel name here';
     hotelAddButton.className = 'btn btn-outline-primary mb-3';
-    hotelAddButton.innerText = 'Add Hotel';
+    hotelAddButton.innerText = 'Search';
     divForm.className = 'mb-3';
     hotelForm.className = 'row g-3';
 
@@ -281,15 +295,15 @@ const createHotelForm = function () {
 
     hotelForm.addEventListener('submit', function (e) {
         e.preventDefault();
-        const detailsContainer = document.querySelector('div#details-container');
-        const h5 = document.createElement('h5');
-        const p = document.createElement('p');
-
-        h5.innerHTML = '<u>Hotel Information</u>';
-        p.innerText = hotelInput.value;
-
-        detailsContainer.append(h5, p);
-
+        // const detailsContainer = document.querySelector('div#details-container');
+        // const h5 = document.createElement('h5');
+        // const p = document.createElement('p');
+        //
+        // h5.innerHTML = '<u>Hotel Information</u>';
+        // p.innerText = hotelInput.value;
+        //
+        // detailsContainer.append(h5, p);
+        queryHotels()
         hotelForm.reset();
     });
 
@@ -370,4 +384,81 @@ const checkErrors = function (start, end) {
     } else {
         return days;
     }
+}
+
+const foursquareAPIURL = `https://api.foursquare.com/v3/places/search?limit=5&query='Hotels'&near='New York,NY'&v=20220531`;
+
+const configuration = {
+    mode: "cors",
+    method: "GET",
+    headers: {
+        Accept: "application/json",
+        Connection: "keep-alive",
+        'Access-Control-Allow-Origin':'*',
+        Authorization: '<INSERT API KEY>'
+    }
+}
+
+const queryHotels = async function () {
+    let jsonData =  await fetch('../test/res.json')
+        .then(response => response.json())
+        .then(data => data)
+        .catch(err => console.error(err));
+
+    // fetch(foursquareAPIURL, configuration)
+    //     .then(response => response.json())
+    //     .then(data => jsonData)
+    //     .catch(err => console.error(err));
+
+    console.log(jsonData.results);
+    createModal(jsonData.results);
+}
+
+const createModal = function (data, ...params) {
+    const divModal = document.querySelector('#resultsModal');
+    const buttonModalClose = document.createElement('button');
+    const modalTitle = document.createElement('h5');
+    const divDialog = document.createElement('div');
+    const divContent = document.createElement('div');
+    const divHeader = document.createElement('div');
+    const divBody = document.createElement('div');
+    divModal.className = 'modal fade';
+    divModal.setAttribute('tabIndex', '-1');
+    divModal.setAttribute('role', 'dialog');
+    divModal.ariaHidden = 'true';
+    divModal.setAttribute('aria-labelledby', 'resultsModalLabel');
+    buttonModalClose.className = 'btn-close';
+    buttonModalClose.type = 'button';
+    buttonModalClose.addEventListener('click', function (e) {
+        e.preventDefault();
+        divModal.style.display = 'none'
+        divModal.innerHTML = ''
+    })
+    divDialog.className = 'modal-dialog';
+    divContent.className = 'modal-content';
+    divHeader.className = 'modal-header';
+    modalTitle.className = 'modal-title';
+    modalTitle.innerText = 'Hotel Search Results';
+    divBody.className = 'modal-body';
+    data.forEach((d) => createCard(divBody, d));
+    divHeader.append(modalTitle, buttonModalClose);
+    divContent.append(divHeader, divBody);
+    divDialog.appendChild(divContent);
+    divModal.appendChild(divDialog);
+    divModal.classList.add("show");
+    divModal.style.display = 'block';
+}
+
+const createCard = function (modalBody, data) {
+    const card = document.createElement('div');
+    const title = document.createElement('h5');
+    const cardBody = document.createElement('div');
+    card.className = 'card';
+    card.id = data.fsq_id;
+    card.style = "width: 18rem";
+    title.className = 'card-title';
+    title.innerText = data.name;
+    cardBody.className = 'card-body';
+    card.append(title, cardBody);
+    modalBody.append(card);
 }

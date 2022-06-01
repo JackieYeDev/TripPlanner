@@ -35,7 +35,7 @@ The following are the rubric requirements for this project:
 ---
 
 Trip Planner is a single page application to help you organize and plan your next trip or getaway.
-This application will utilize `Google API` in order to search for hotels, flights, or drive time.
+This application will utilize `FourSquare API` in order to search for hotels and venues in the area.
 
 ## User Interface Design
 

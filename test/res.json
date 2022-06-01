@@ -1,0 +1,603 @@
+{
+  "results": [
+    {
+      "fsq_id": "554c1b85498efa107620d07e",
+      "categories": [
+        {
+          "id": 19014,
+          "name": "Hotel",
+          "icon": {
+            "prefix": "https://ss3.4sqi.net/img/categories_v2/travel/hotel_",
+            "suffix": ".png"
+          }
+        }
+      ],
+      "chains": [
+        {
+          "id": "ed51280f-464a-4031-a4c8-9098a6a1fa71",
+          "name": "EDITION Hotels"
+        }
+      ],
+      "distance": 452,
+      "geocodes": {
+        "main": {
+          "latitude": 40.741244,
+          "longitude": -73.987484
+        },
+        "roof": {
+          "latitude": 40.741244,
+          "longitude": -73.987484
+        }
+      },
+      "link": "/v3/places/554c1b85498efa107620d07e",
+      "location": {
+        "address": "5 Madison Ave",
+        "census_block": "360610056001006",
+        "country": "US",
+        "cross_street": "",
+        "dma": "New York",
+        "formatted_address": "5 Madison Ave, New York, NY 10010",
+        "locality": "New York",
+        "neighborhood": [
+          "Flatiron"
+        ],
+        "postcode": "10010",
+        "region": "NY"
+      },
+      "name": "The New York EDITION",
+      "related_places": {
+        "children": [
+          {
+            "fsq_id": "554be936498e2dcf8fca58a5",
+            "name": "The Clocktower"
+          },
+          {
+            "fsq_id": "58dae5db2b04f862ef720a56",
+            "name": "The Bar"
+          }
+        ]
+      },
+      "timezone": "America/New_York"
+    },
+    {
+      "fsq_id": "4bec60a5f909ef3b2808a9c6",
+      "categories": [
+        {
+          "id": 19018,
+          "name": "Resort",
+          "icon": {
+            "prefix": "https://ss3.4sqi.net/img/categories_v2/travel/resort_",
+            "suffix": ".png"
+          }
+        }
+      ],
+      "chains": [],
+      "distance": 602,
+      "geocodes": {
+        "main": {
+          "latitude": 40.747166,
+          "longitude": -73.989944
+        },
+        "roof": {
+          "latitude": 40.747166,
+          "longitude": -73.989944
+        }
+      },
+      "link": "/v3/places/4bec60a5f909ef3b2808a9c6",
+      "location": {
+        "address": "851 Avenue of the Americas",
+        "census_block": "360610095001000",
+        "country": "US",
+        "cross_street": "btwn W 29th & W 30th St",
+        "dma": "New York",
+        "formatted_address": "851 Avenue of the Americas (btwn W 29th & W 30th St), New York, NY 10001",
+        "locality": "New York",
+        "neighborhood": [
+          "Chelsea"
+        ],
+        "postcode": "10001",
+        "region": "NY"
+      },
+      "name": "Kimpton Hotel Eventi",
+      "related_places": {
+        "children": [
+          {
+            "fsq_id": "4fda2813e4b0884c8eae04ea",
+            "name": "Eventi Open Air Plaza"
+          },
+          {
+            "fsq_id": "4fd64e82be77e3edfd8a8646",
+            "name": "Humphrey's at The Eventi Hotel"
+          },
+          {
+            "fsq_id": "57a0eccf498e2fb0d212bec4",
+            "name": "Event Block"
+          },
+          {
+            "fsq_id": "552eee7e498e2f17bcbe1bc2",
+            "name": "The Vine"
+          },
+          {
+            "fsq_id": "55e63b89498e3ed62f75cff3",
+            "name": "L'Amico"
+          }
+        ]
+      },
+      "timezone": "America/New_York"
+    },
+    {
+      "fsq_id": "4a0e0f85f964a520bf751fe3",
+      "categories": [
+        {
+          "id": 19014,
+          "name": "Hotel",
+          "icon": {
+            "prefix": "https://ss3.4sqi.net/img/categories_v2/travel/hotel_",
+            "suffix": ".png"
+          }
+        }
+      ],
+      "chains": [],
+      "distance": 555,
+      "geocodes": {
+        "main": {
+          "latitude": 40.745654,
+          "longitude": -73.988006
+        },
+        "roof": {
+          "latitude": 40.745654,
+          "longitude": -73.988006
+        }
+      },
+      "link": "/v3/places/4a0e0f85f964a520bf751fe3",
+      "location": {
+        "address": "20 W 29th St",
+        "address_extended": "at Broadway",
+        "census_block": "360610076002004",
+        "country": "US",
+        "cross_street": "at Broadway",
+        "dma": "New York",
+        "formatted_address": "20 W 29th St (at Broadway), New York, NY 10001",
+        "locality": "New York",
+        "neighborhood": [
+          "Flatiron"
+        ],
+        "postcode": "10001",
+        "region": "NY"
+      },
+      "name": "Ace Hotel New York",
+      "related_places": {
+        "children": [
+          {
+            "fsq_id": "5b6c4a675c6838002c923237",
+            "name": "Black Seed Bagels"
+          },
+          {
+            "fsq_id": "4f42ddfbe4b0435152117a8e",
+            "name": "Ace Hotel Boardroom"
+          },
+          {
+            "fsq_id": "4aa52d50f964a520834720e3",
+            "name": "Stumptown Coffee Roasters"
+          },
+          {
+            "fsq_id": "4aa9386ef964a5208b5220e3",
+            "name": "The Breslin Bar & Dining Room"
+          },
+          {
+            "fsq_id": "4adfb640f964a520e57c21e3",
+            "name": "Lobby Bar at Ace Hotel New York"
+          }
+        ]
+      },
+      "timezone": "America/New_York"
+    },
+    {
+      "fsq_id": "59d4126b8194fc768a2cfcde",
+      "categories": [
+        {
+          "id": 19014,
+          "name": "Hotel",
+          "icon": {
+            "prefix": "https://ss3.4sqi.net/img/categories_v2/travel/hotel_",
+            "suffix": ".png"
+          }
+        },
+        {
+          "id": 19016,
+          "name": "Lodge",
+          "icon": {
+            "prefix": "https://ss3.4sqi.net/img/categories_v2/travel/default_",
+            "suffix": ".png"
+          }
+        }
+      ],
+      "chains": [],
+      "distance": 724,
+      "geocodes": {
+        "main": {
+          "latitude": 40.73971,
+          "longitude": -73.984367
+        },
+        "roof": {
+          "latitude": 40.73971,
+          "longitude": -73.984367
+        }
+      },
+      "link": "/v3/places/59d4126b8194fc768a2cfcde",
+      "location": {
+        "address": "23 Lexington Ave",
+        "census_block": "360610068004000",
+        "country": "US",
+        "cross_street": "",
+        "dma": "New York",
+        "formatted_address": "23 Lexington Ave, New York, NY 10010",
+        "locality": "New York",
+        "neighborhood": [
+          "Flatiron"
+        ],
+        "postcode": "10010",
+        "region": "NY"
+      },
+      "name": "Freehand New York Food",
+      "related_places": {
+        "children": [
+          {
+            "fsq_id": "5a5ec2e4bb8d3614bb5d49f5",
+            "name": "Simon & The Whale"
+          },
+          {
+            "fsq_id": "5a5ec2556dcf044902adae96",
+            "name": "Studio"
+          },
+          {
+            "fsq_id": "5a5fd28cacb00b243f51cb0a",
+            "name": "The George Washington Bar"
+          },
+          {
+            "fsq_id": "6175d46a23636802143ccac3",
+            "name": "Comodo"
+          },
+          {
+            "fsq_id": "6191ef837d5c697dec18b2e9",
+            "name": "Georgia Room"
+          }
+        ]
+      },
+      "timezone": "America/New_York"
+    },
+    {
+      "fsq_id": "571558a2498e2f199298d02b",
+      "categories": [
+        {
+          "id": 19014,
+          "name": "Hotel",
+          "icon": {
+            "prefix": "https://ss3.4sqi.net/img/categories_v2/travel/hotel_",
+            "suffix": ".png"
+          }
+        }
+      ],
+      "chains": [],
+      "distance": 747,
+      "geocodes": {
+        "main": {
+          "latitude": 40.736246,
+          "longitude": -73.99672
+        },
+        "roof": {
+          "latitude": 40.736246,
+          "longitude": -73.99672
+        }
+      },
+      "link": "/v3/places/571558a2498e2f199298d02b",
+      "location": {
+        "address": "52 W 13th St",
+        "census_block": "360610063001001",
+        "country": "US",
+        "cross_street": "btwn 5th & 6th Ave",
+        "dma": "New York",
+        "formatted_address": "52 W 13th St (btwn 5th & 6th Ave), New York, NY 10011",
+        "locality": "New York",
+        "neighborhood": [
+          "Chelsea"
+        ],
+        "postcode": "10011",
+        "region": "NY"
+      },
+      "name": "Walker Hotel Greenwich Village",
+      "related_places": {
+        "children": [
+          {
+            "fsq_id": "58252d364c6d67719e5d0b8c",
+            "name": "Society Cafe"
+          }
+        ]
+      },
+      "timezone": "America/New_York"
+    },
+    {
+      "fsq_id": "59aaa4888a6f173536519ecb",
+      "categories": [
+        {
+          "id": 19009,
+          "name": "Lodging",
+          "icon": {
+            "prefix": "https://ss3.4sqi.net/img/categories_v2/travel/default_",
+            "suffix": ".png"
+          }
+        }
+      ],
+      "chains": [],
+      "distance": 514,
+      "geocodes": {
+        "main": {
+          "latitude": 40.746311,
+          "longitude": -73.989648
+        },
+        "roof": {
+          "latitude": 40.746311,
+          "longitude": -73.989648
+        }
+      },
+      "link": "/v3/places/59aaa4888a6f173536519ecb",
+      "location": {
+        "address": "44 W 29th St",
+        "census_block": "360610076002003",
+        "country": "US",
+        "cross_street": "",
+        "dma": "New York",
+        "formatted_address": "44 W 29th St, New York, NY 10001",
+        "locality": "New York",
+        "neighborhood": [
+          "Chelsea"
+        ],
+        "postcode": "10001",
+        "region": "NY"
+      },
+      "name": "MADE Hotel",
+      "related_places": {
+        "children": [
+          {
+            "fsq_id": "59e930788134887f6e07ba70",
+            "name": "Good Behavior"
+          },
+          {
+            "fsq_id": "59ac2ec6fdb9a734dd847025",
+            "name": "Paper Coffee"
+          },
+          {
+            "fsq_id": "59dd5f656bd36b7617764a20",
+            "name": "Ferris"
+          }
+        ]
+      },
+      "timezone": "America/New_York"
+    },
+    {
+      "fsq_id": "515a1b3ee4b0f84f522c4b7f",
+      "categories": [
+        {
+          "id": 19014,
+          "name": "Hotel",
+          "icon": {
+            "prefix": "https://ss3.4sqi.net/img/categories_v2/travel/hotel_",
+            "suffix": ".png"
+          }
+        }
+      ],
+      "chains": [],
+      "distance": 1126,
+      "geocodes": {
+        "main": {
+          "latitude": 40.745974,
+          "longitude": -74.005055
+        }
+      },
+      "link": "/v3/places/515a1b3ee4b0f84f522c4b7f",
+      "location": {
+        "address": "180 10th Ave",
+        "census_block": "360610089004001",
+        "country": "US",
+        "cross_street": "at W 20th St",
+        "dma": "New York",
+        "formatted_address": "180 10th Ave (at W 20th St), New York, NY 10011",
+        "locality": "New York",
+        "neighborhood": [
+          "Chelsea"
+        ],
+        "postcode": "10011",
+        "region": "NY"
+      },
+      "name": "The High Line Hotel",
+      "related_places": {
+        "children": [
+          {
+            "fsq_id": "519a94e3498e722d3d9ae1bf",
+            "name": "Intelligentsia Coffee"
+          },
+          {
+            "fsq_id": "5cf43fd79e0d54002cae409a",
+            "name": "Ingo"
+          },
+          {
+            "fsq_id": "5571fdab498e07f471062d1f",
+            "name": "Alta Linea"
+          },
+          {
+            "fsq_id": "593ca51cf0b490219487fc4b",
+            "name": "180 Tenth"
+          },
+          {
+            "fsq_id": "5c8d81134b78c500399b2848",
+            "name": "The Enigmatist"
+          }
+        ]
+      },
+      "timezone": "America/New_York"
+    },
+    {
+      "fsq_id": "558dff09498e0910b7cbf9bd",
+      "categories": [
+        {
+          "id": 19009,
+          "name": "Lodging",
+          "icon": {
+            "prefix": "https://ss3.4sqi.net/img/categories_v2/travel/default_",
+            "suffix": ".png"
+          }
+        }
+      ],
+      "chains": [],
+      "distance": 1258,
+      "geocodes": {
+        "main": {
+          "latitude": 40.753372,
+          "longitude": -73.9939
+        },
+        "roof": {
+          "latitude": 40.753372,
+          "longitude": -73.9939
+        }
+      },
+      "link": "/v3/places/558dff09498e0910b7cbf9bd",
+      "location": {
+        "address": "321 W 35th St",
+        "census_block": "360610111001003",
+        "country": "US",
+        "cross_street": "",
+        "dma": "New York",
+        "formatted_address": "321 W 35th St, New York, NY 10001",
+        "locality": "New York",
+        "neighborhood": [
+          "Garment District"
+        ],
+        "postcode": "10001",
+        "region": "NY"
+      },
+      "name": "EVEN Hotels New York - Times Square South",
+      "related_places": {
+        "children": [
+          {
+            "fsq_id": "56d0ec44cd107cc26dbf0ada",
+            "name": "Cork & Kale"
+          }
+        ]
+      },
+      "timezone": "America/New_York"
+    },
+    {
+      "fsq_id": "5139440ee4b0b10ea1c7b7c0",
+      "categories": [
+        {
+          "id": 19014,
+          "name": "Hotel",
+          "icon": {
+            "prefix": "https://ss3.4sqi.net/img/categories_v2/travel/hotel_",
+            "suffix": ".png"
+          }
+        }
+      ],
+      "chains": [],
+      "distance": 1128,
+      "geocodes": {
+        "main": {
+          "latitude": 40.732524,
+          "longitude": -73.996704
+        },
+        "roof": {
+          "latitude": 40.732524,
+          "longitude": -73.996704
+        }
+      },
+      "link": "/v3/places/5139440ee4b0b10ea1c7b7c0",
+      "location": {
+        "address": "5 W 8th St",
+        "census_block": "360610063004000",
+        "country": "US",
+        "cross_street": "5th Ave",
+        "dma": "New York",
+        "formatted_address": "5 W 8th St (5th Ave), New York, NY 10011",
+        "locality": "New York",
+        "neighborhood": [
+          "Downtown"
+        ],
+        "postcode": "10011",
+        "region": "NY"
+      },
+      "name": "The Marlton Hotel",
+      "related_places": {},
+      "timezone": "America/New_York"
+    },
+    {
+      "fsq_id": "49d3d4a7f964a5201a5c1fe3",
+      "categories": [
+        {
+          "id": 19009,
+          "name": "Lodging",
+          "icon": {
+            "prefix": "https://ss3.4sqi.net/img/categories_v2/travel/default_",
+            "suffix": ".png"
+          }
+        }
+      ],
+      "chains": [],
+      "distance": 1300,
+      "geocodes": {
+        "main": {
+          "latitude": 40.740795,
+          "longitude": -74.007915
+        }
+      },
+      "link": "/v3/places/49d3d4a7f964a5201a5c1fe3",
+      "location": {
+        "address": "848 Washington St",
+        "address_extended": "at West 13th Street",
+        "census_block": "360610079001010",
+        "country": "US",
+        "cross_street": "at W 13th St",
+        "dma": "New York",
+        "formatted_address": "848 Washington St (at W 13th St), New York, NY 10014",
+        "locality": "New York",
+        "neighborhood": [
+          "Chelsea"
+        ],
+        "postcode": "10014",
+        "region": "NY"
+      },
+      "name": "The Standard, High Line",
+      "related_places": {
+        "children": [
+          {
+            "fsq_id": "4febc254e4b0d7135b37ebb1",
+            "name": "The Standard Plaza"
+          },
+          {
+            "fsq_id": "4bedec63a40fc928ebc1820c",
+            "name": "The High Line Room"
+          },
+          {
+            "fsq_id": "4df3c80588772e1f8155223a",
+            "name": "Gym at The Standard, New York - 17th Floor"
+          },
+          {
+            "fsq_id": "4d0e5378be6d6ea896bb09b5",
+            "name": "The Standard Ice Rink"
+          }
+        ]
+      },
+      "timezone": "America/New_York"
+    }
+  ],
+  "context": {
+    "geo_bounds": {
+      "circle": {
+        "center": {
+          "latitude": 40.742185,
+          "longitude": -73.992602
+        },
+        "radius": 6310
+      }
+    }
+  }
+}
