@@ -384,30 +384,30 @@ const checkErrors = function (start, end) {
 /*
 *   Proxy Server for Trip Planner
 */
-const proxyServerURL = `https://proxyservertripplanner.onrender.com/hotels/`;
-
-const configuration = {
-    mode: "cors",
-    method: "GET",
-    headers: {
-        Accept: "application/json",
-        "Access-Control-Allow-Origin": "*"
-    }
-}
+// const proxyServerURL = `https://proxyservertripplanner.onrender.com/hotels/`;
+//
+// const configuration = {
+//     mode: "cors",
+//     method: "GET",
+//     headers: {
+//         Accept: "application/json",
+//         "Access-Control-Allow-Origin": "*"
+//     }
+// }
 
 const queryHotels = async function (query) {
-    // let jsonData =  await fetch('../test/res.json')
-    //     .then(response => response.json())
-    //     .then(data => data)
-    //     .catch(err => console.error(err));
-
-    let jsonData = await fetch(proxyServerURL+query, configuration)
+    let jsonData =  await fetch('../test/res.json')
         .then(response => response.json())
         .then(data => data)
         .catch(err => console.error(err));
-
-    console.log(jsonData.results);
-    createModal(jsonData.results);
+    //
+    // let jsonData = await fetch(proxyServerURL+query, configuration)
+    //     .then(response => response.json())
+    //     .then(data => data)
+    //     .catch(err => console.error(err));
+    //
+    // console.log(jsonData.results);
+    // createModal(jsonData.results);
 }
 
 const createModal = function (data, ...params) {
