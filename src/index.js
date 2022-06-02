@@ -90,7 +90,7 @@ function init() {
     const formContainer = document.querySelector('div#content-container');
     const tocContainer = document.querySelector('ul#toc-container');
     const messageBar = document.querySelector('div#message-bar');
-    const loadContainer = document.querySelector('div#load-container');
+    // const loadContainer = document.querySelector('div#load-container');
 
     // Create Title of Application
     const titleP = document.createElement('p');
@@ -290,14 +290,6 @@ const createHotelForm = function () {
 
     hotelForm.addEventListener('submit', function (e) {
         e.preventDefault();
-        // const detailsContainer = document.querySelector('div#details-container');
-        // const h5 = document.createElement('h5');
-        // const p = document.createElement('p');
-        //
-        // h5.innerHTML = '<u>Hotel Information</u>';
-        // p.innerText = hotelInput.value;
-        //
-        // detailsContainer.append(h5, p);
         queryHotels(hotelInput.value);
         hotelForm.reset();
     });
@@ -402,7 +394,7 @@ const queryHotels = async function (query) {
         .then(data => data)
         .catch(err => console.error(err));
 
-    createModal(jsonData.results);
+    createModal(jsonData.results.slice(0, 6));
     //
     // let jsonData = await fetch(proxyServerURL+query, configuration)
     //     .then(response => response.json())
@@ -421,6 +413,7 @@ const createModal = function (data, ...params) {
     const divContent = document.createElement('div');
     const divHeader = document.createElement('div');
     const divBody = document.createElement('div');
+    const cardGroup = document.createElement('div');
     divModal.className = 'modal fade';
     divModal.setAttribute('tabIndex', '-1');
     divModal.setAttribute('role', 'dialog');
@@ -433,13 +426,16 @@ const createModal = function (data, ...params) {
         divModal.style.display = 'none'
         divModal.innerHTML = ''
     })
-    divDialog.className = 'modal-dialog';
+    divDialog.className = 'modal-dialog modal-xl';
     divContent.className = 'modal-content';
     divHeader.className = 'modal-header';
     modalTitle.className = 'modal-title';
     modalTitle.innerText = 'Hotel Search Results';
     divBody.className = 'modal-body';
-    data.forEach((d) => createCard(divBody, d));
+    cardGroup.className = 'row row-cols-1 row-cols-md-3 g-4';
+    data.forEach((d) => createCard(cardGroup, divModal, d));
+    divBody.append(cardGroup);
+    divBody.style.overflow = 'scroll';
     divHeader.append(modalTitle, buttonModalClose);
     divContent.append(divHeader, divBody);
     divDialog.appendChild(divContent);
@@ -448,17 +444,48 @@ const createModal = function (data, ...params) {
     divModal.style.display = 'block';
 }
 
-const createCard = function (modalBody, data) {
+const createCard = function (cardGroup, modal, data) {
     const card = document.createElement('div');
+    const cardHeader = document.createElement('div');
     const title = document.createElement('h5');
+    const text = document.createElement('p');
     const cardBody = document.createElement('div');
-    card.className = 'card';
+    const addButton = document.createElement('button');
+    const div = document.createElement('div');
+    card.className = 'card h-100';
     card.id = data.fsq_id;
     card.style = "width: 18rem";
     title.className = 'card-title';
     title.innerText = data.name;
+    text.className = 'card-text';
+    text.innerText = "Address: " + data.location.address;
+    cardHeader.innerText = data.name;
+    cardHeader.className = 'card-header';
+
+    addButton.className = 'btn btn-outline-primary mb-3'
+    addButton.innerText = 'Add Hotel';
+    addButton.addEventListener('click', function (e) {
+        e.preventDefault();
+        modal.style.display = 'none';
+        modal.innerHTML = '';
+        addHotel(data.name);
+    });
+
     cardBody.className = 'card-body';
-    cardBody.innerText = data.location.address;
-    card.append(title, cardBody);
-    modalBody.append(card);
+    cardBody.append(title, text, addButton);
+    card.append(cardHeader, cardBody);
+
+    div.className = 'col';
+    div.append(card);
+    cardGroup.append(div);
+}
+
+const addHotel = function (hotelName) {
+    const detailsContainer = document.querySelector('div#details-container');
+    const h5 = document.createElement('h5');
+    const p = document.createElement('p');
+
+    h5.innerHTML = '<u>Hotel Information</u>';
+    p.innerText = hotelName;
+    detailsContainer.append(h5, p);
 }
