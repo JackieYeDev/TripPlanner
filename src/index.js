@@ -400,6 +400,8 @@ const queryHotels = async function (query) {
         .then(response => response.json())
         .then(data => data)
         .catch(err => console.error(err));
+
+    createModal(jsonData.results);
     //
     // let jsonData = await fetch(proxyServerURL+query, configuration)
     //     .then(response => response.json())
