@@ -396,7 +396,8 @@ const checkErrors = function (start, end) {
 // }
 
 const queryHotels = async function (query) {
-    let jsonData =  await fetch('../test/res.json')
+    const jsonURL = document.location.href == "https://jackieyedev.github.io/TripPlanner/" ? "https://jackieyedev.github.io/TripPlanner/test/res.json" : "../test/res.json"
+    let jsonData =  await fetch(jsonURL)
         .then(response => response.json())
         .then(data => data)
         .catch(err => console.error(err));
@@ -457,6 +458,7 @@ const createCard = function (modalBody, data) {
     title.className = 'card-title';
     title.innerText = data.name;
     cardBody.className = 'card-body';
+    cardBody.innerText = data.location.address;
     card.append(title, cardBody);
     modalBody.append(card);
 }
