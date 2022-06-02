@@ -248,9 +248,6 @@ const createForm = function (days, button, ...elements) {
     // Remove unnecessary elements
     [...elements].forEach((e) => e.remove());
 
-    // Add Flight Form
-    // createFlightForm();
-
     // Add Hotel Form
     createHotelForm();
 
@@ -271,43 +268,6 @@ const createForm = function (days, button, ...elements) {
 
 };
 
-// const createFlightForm = function () {
-//     const divForm = document.createElement('div');
-//     const flightForm = document.createElement('form');
-//     const flightInput = document.createElement('input');
-//     const flightAddButton = document.createElement('button');
-//
-//     flightInput.placeholder = 'Enter your flight number here';
-//     flightAddButton.className = 'btn btn-outline-primary mb-3';
-//     flightAddButton.innerText = 'Add Flight';
-//     divForm.className = 'mb-3';
-//     flightForm.className = 'row g-3';
-//
-//     [flightInput, flightAddButton].map(function (e) {
-//         const div = document.createElement('div');
-//         div.className = 'col-auto';
-//         div.appendChild(e);
-//         flightForm.appendChild(div);
-//     });
-//
-//     flightForm.addEventListener('submit', function (e) {
-//         e.preventDefault();
-//         const detailsContainer = document.querySelector('div#details-container');
-//         const h5 = document.createElement('h5');
-//         const p = document.createElement('p');
-//
-//         h5.innerHTML = '<u>Flight Information</u>';
-//         p.innerText = flightInput.value;
-//
-//         detailsContainer.append(h5, p);
-//
-//         flightForm.reset();
-//     })
-//
-//     divForm.appendChild(flightForm);
-//
-//     document.querySelector('div#content-container').appendChild(divForm);
-// };
 
 const createHotelForm = function () {
     const divForm = document.createElement('div');
