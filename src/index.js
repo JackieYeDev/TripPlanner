@@ -1,79 +1,4 @@
-class Trip {
-    constructor(name, days = []) {
-        this.id = Math.floor(Math.random() * 1000000);
-        this.name = name || "";
-        this.days = days || [];
-    }
 
-    getId() {
-        return this.id
-    }
-
-    getName() {
-        console.log(this.name);
-    }
-    setName(name) {
-        this.name = name;
-    }
-
-    getDays() {
-        console.log(this.days.length);
-    }
-    setDays([...Day]) {
-        Day.forEach(e => this.days.push(e));
-    }
-}
-
-class Day {
-    constructor(day, activity = []) {
-        this.day = parseInt(day);
-        this.activity = activity;
-        this.ref = tripID || null;
-    }
-
-    getDay() {
-        console.log(this.activity);
-    }
-
-    setActivity(Activity) {
-        this.activity.push(Activity);
-    }
-}
-
-class Activity {
-    constructor(start, end, description, tripID) {
-        this.activityID = Math.floor(Math.random() * 1000000);
-        this.start = start;
-        this.end = end;
-        this.description = description;
-        this.ref = tripID || null;
-    }
-
-    getActivity() {
-        return {
-            "id": this.activityID,
-            "start": this.start,
-            "end": this.end,
-            "description": this.description,
-            "ref": this.ref
-        }
-    }
-
-    setDay(Day) {
-        Day.setActivity(this.getActivity());
-    }
-
-    setRef(id) {
-        this.ref = id;
-    }
-}
-
-class Hotel extends Activity {
-    constructor() {
-        super();
-
-    }
-}
 
 let tripID;
 let tripObj;
@@ -170,8 +95,6 @@ function init() {
         const duration = [startDate, endDate];
         const numberOfDays = countNumberOfDays(startDate, endDate);
 
-        tripObj = new Trip(tripNameInput.value);
-        tripID = tripObj.getId();
         day = 1;
 
         createNav(checkErrors(startDate, endDate), tocContainer);
@@ -181,40 +104,6 @@ function init() {
     }
 
     nextButton.addEventListener('click', beginAdventure);
-
-    /*
-        IMPLEMENTATION OF LOAD WHEN JSON-SERVER IS SET UP
-     */
-
-    // const loadForm = document.createElement('form');
-    // const loadSelection = document.createElement('select');
-    // const loadButton = document.createElement('button');
-    //
-    // loadButton.type = 'submit';
-    // loadButton.className = 'btn btn-primary mb-3';
-    // loadButton.innerText = 'Load';
-    //
-    // loadSelection.className = 'form-select';
-    //
-    // const database = fetch(`http://localhost:8080`, {
-    //     method: "GET",
-    //     headers: {
-    //         "Content-Type": "application/json",
-    //         Accept: "application/json"
-    //     }
-    // })
-    //     .then(res => res.json())
-    //     .then(data => data)
-    //     .catch(err => "------------------");
-    //
-    // database.forEach(function (d) {
-    //     const loadOption = document.createElement('option');
-    //     loadOption.innerText = d;
-    //     loadSelection.appendChild(loadOption);
-    // });
-    //
-    // loadForm.append(loadSelection, loadButton);
-    // loadContainer.append(loadForm);
 }
 
 const generateTableRows = function (tbody, ...elements) {
@@ -264,7 +153,7 @@ const createForm = function (days, button, ...elements) {
         daysArray.push(day);
     }
 
-    tripObj.setDays(daysArray);
+//    tripObj.setDays(daysArray);
 
 };
 
