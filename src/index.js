@@ -1,7 +1,10 @@
-
+// Constructor for tripObj
+const tripObj = {
+    tripName: "",
+    days: []
+}
 
 let tripID;
-let tripObj;
 let day;
 
 document.addEventListener("DOMContentLoaded", init);
@@ -128,7 +131,14 @@ const createNav = function (days, container) {
         const li = document.createElement('li');
         const h2 = document.createElement('h2');
         h2.innerText = `Day ${i+1}`;
+        li.id = i+1;
         li.appendChild(h2);
+        li.addEventListener('click', function (e){
+            e.preventDefault();
+            /*
+            Code to load activities
+             */
+        })
         container.appendChild(li);
     }
 };
@@ -149,11 +159,12 @@ const createForm = function (days, button, ...elements) {
     const daysArray = [];
 
     for(let i=0; i <= days; i++) {
-        const day = new Day(i+1, []);
+        const day = {day: i+1, activity:[]};
         daysArray.push(day);
     }
 
-//    tripObj.setDays(daysArray);
+    tripObj.days.push(daysArray);
+    console.log(tripObj);
 
 };
 
@@ -201,16 +212,12 @@ const createActivityForm = function () {
     activityAddButton.innerText = 'Add Activity';
     divForm.className = 'mb-3';
     activityForm.className = 'row g-3';
-    startInput.placeholder = 'Start time [HHMM]';
-    startInput.type = 'number';
-    startInput.min = '0000'
-    startInput.max = '2400';
-    startInput.step = '10';
-    endInput.placeholder = 'End time [HHMM]';
-    endInput.type = 'number';
-    endInput.min = '0000';
-    endInput.max = '2400';
-    endInput.step = '10';
+    startInput.type = 'time';
+    startInput.min = '00:00'
+    startInput.max = '24:00';
+    endInput.type = 'time';
+    endInput.min = '00:00';
+    endInput.max = '24:00';
 
     [startInput, endInput].map(function (e) {
         const div = document.createElement('div');
