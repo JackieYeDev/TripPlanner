@@ -157,7 +157,13 @@ const createNav = function (days, container) {
     messageBar.innerHTML = "";
     for(let i=0; i <= days; i++) {
         const li = document.createElement('li');
+        /*
+         *  @TODO: Modify li.innerText to YYYY-MM-DD : Day ${i+1}
+         */
         li.innerText = `Day ${i+1}`;
+        /*
+         *  @TODO: Modify li.id to YYYY-MM-DD
+         */
         li.id = i+1;
         li.className = "list-group-item list-group-item-action";
         if(li.id == 1) {
@@ -186,6 +192,10 @@ const createForm = function (days, ...elements) {
     // Modify Next Button
     const nextButton = document.createElement('button');
 
+    /*
+    *  @TODO: Modify nextButton's text to "Summarize" at the end
+    */
+
     nextButton.className = 'btn btn-dark btn-lg';
     nextButton.innerText = duration===1?'End of your trip!':'Next Day';
     nextButton.id = 'next';
@@ -202,6 +212,10 @@ const createForm = function (days, ...elements) {
             this.innerText = 'End of your trip!';
             this.disabled = true;
         }
+
+        /*
+        *  @TODO: Add summarize function to render modal with all the Activities listed for the trip
+        */
     });
 
     document.body.append(nextButton);
@@ -235,7 +249,9 @@ const createHotelForm = function () {
     hotelAddButton.innerText = 'Search';
     divForm.className = 'mb-3';
     hotelForm.className = 'row g-3';
-
+    /*
+    *  @TODO: Add start and end date for Hotel stay
+    */
     let hotelLabel = generateLabels(hotelInput.id, "Hotel Search by Location:");
     generateTableHeaders(tbody, hotelLabel);
     [hotelInput, hotelAddButton].map(element => generateTableRows(tbody, element));
@@ -298,9 +314,25 @@ const createActivityForm = function () {
         const detailsContainer = document.querySelector('div#details-container');
         const h5 = document.createElement('h5');
         const p = document.createElement('p');
+        const button = document.createElement('button');
 
         h5.innerHTML = `<u>${startInput.value} - ${endInput.value}</u>`;
         p.innerText = `${activityInput.value}`;
+
+        /*
+        *  @TODO: Create an edit button with function to edit it's corresponding entry in tribObj
+        */
+
+        /*
+        *  @TODO: Create a delete button with function to delete it's corresponding entry from tribObj
+        */
+        button.type = 'button';
+        button.className = 'btn-close btn-close-white btn-sm';
+        button.addEventListener('click', function (e) {
+            e.preventDefault();
+            this.remove();
+        });
+        // h5.append(button);
 
         detailsContainer.append(h5, p);
 
@@ -311,7 +343,10 @@ const createActivityForm = function () {
         };
 
         tripObj.days[0][day-1].activity.push(activity);
-
+        /*
+        *  @TODO: Create a sorting function for tribObj.days[0][day-1].activity that will auto-sort on new/delete entry
+        *    based on startTime
+        */
         activityForm.reset();
     });
 
@@ -324,7 +359,7 @@ const countNumberOfDays = (startDate, endDate) =>
     ((Date.parse(endDate.valueAsDate) - Date.parse(startDate.valueAsDate))/(1000 * 3600 * 24));
 
 const checkErrors = function (start, end) {
-    const days = countNumberOfDays(start, end)
+    const days = countNumberOfDays(start, end);
     if (days < 0) {
         const messageBar = document.querySelector('#message-bar');
         messageBar.innerHTML = '<span> Please enter a valid start and end date! </span>';
@@ -409,6 +444,7 @@ const createCard = function (cardGroup, modal, data) {
     const cardHeader = document.createElement('div');
     const title = document.createElement('h5');
     const text = document.createElement('p');
+    const hotelAddress = document.createElement('address');
     const cardBody = document.createElement('div');
     const addButton = document.createElement('button');
     const div = document.createElement('div');
@@ -418,7 +454,10 @@ const createCard = function (cardGroup, modal, data) {
     title.className = 'card-title';
     title.innerText = data.name;
     text.className = 'card-text';
-    text.innerText = "Address: " + data.location.address;
+    let address = data.location.formatted_address.split(",");
+    address = `<strong>${data.name}</strong><br>${address[0]}<br>${address[1]}, ${address[2]}`;
+    hotelAddress.innerHTML = address;
+    text.append(hotelAddress);
     cardHeader.innerText = data.name;
     cardHeader.className = 'card-header';
 
@@ -428,7 +467,7 @@ const createCard = function (cardGroup, modal, data) {
         e.preventDefault();
         modal.style.display = 'none';
         modal.innerHTML = '';
-        addHotel(data.name);
+        addHotel(address);
     });
 
     cardBody.className = 'card-body';
@@ -440,12 +479,21 @@ const createCard = function (cardGroup, modal, data) {
     cardGroup.append(div);
 }
 
-const addHotel = function (hotelName) {
+const addHotel = function (address) {
     const detailsContainer = document.querySelector('div#details-container');
     const h5 = document.createElement('h5');
     const p = document.createElement('p');
 
     h5.innerHTML = '<u>Hotel Information</u>';
-    p.innerText = hotelName;
+    p.innerHTML = address;
     detailsContainer.append(h5, p);
+
+    /*
+    *  @TODO: Add Hotel to tripObj Object
+    */
 }
+
+
+/*
+*  @TODO: Create a load date's activity function
+*/

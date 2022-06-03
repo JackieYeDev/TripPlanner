@@ -46,6 +46,7 @@ body {
 #navigation-container {
     top: 5%;
     left: 5%;
+    min-width: 10%;
     max-width: 40%;
     max-height: 40%;
     position: fixed;
@@ -59,7 +60,7 @@ body {
     display: none;
 }
 ul li {
-    font-size: 20px;
+    font-size: 18px;
 }
 #content-container {
     display: inline-block;
