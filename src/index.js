@@ -4,8 +4,8 @@ const tripObj = {
     days: []
 }
 
-let tripID;
 let day;
+let duration;
 
 document.addEventListener("DOMContentLoaded", init);
 
@@ -42,7 +42,7 @@ function init() {
     const tripNameLabel = document.createElement('label');
 
     tripNameInput.type = 'text';
-    tripNameInput.required = 'true';
+    tripNameInput.required = true;
     tripNameLabel.setAttribute('for', 'tripName');
     tripNameLabel.innerText = 'Trip Name: ';
 
@@ -53,6 +53,7 @@ function init() {
 
     startDate.id = 'startDate';
     startDate.type = 'date';
+    startDate.required = true;
     startDateLabel.setAttribute('for', 'startDate');
     startDateLabel.innerText = 'Start Date:';
 
@@ -63,6 +64,7 @@ function init() {
 
     endDate.id = 'endDate';
     endDate.type = 'date';
+    endDate.required = true;
     endDateLabel.setAttribute('for', 'endDate');
     endDateLabel.innerText = 'End Date:';
 
@@ -70,7 +72,6 @@ function init() {
 
     const nextButton = document.createElement('button');
 
-    // nextButton.id = 'next';
     nextButton.className = 'btn btn-outline-primary mb-3';
     nextButton.innerText = "Begin Your Adventure!";
 
@@ -82,8 +83,16 @@ function init() {
 
     // Set Attributes to Next Button
     const beginAdventure = function (e) {
-        e.preventDefault();
+        // e.preventDefault();
         // Prevent Empty Input
+
+        if(tripNameInput.value === "") {
+            messageBar.className = 'alert alert-danger';
+            messageBar.setAttribute('role','alert');
+            messageBar.innerText = 'Please enter a trip name!';
+            return false;
+        }
+
         if(startDate.value === "" || endDate.value === "") {
             messageBar.className = 'alert alert-danger';
             messageBar.setAttribute('role','alert');
@@ -91,17 +100,19 @@ function init() {
             return false;
         }
 
+        titleP.innerHTML += `<p><h3>${tripNameInput.value}</h3></p>`
+
         messageBar.innerHTML = '';
         messageBar.removeAttribute('class');
         messageBar.removeAttribute('role');
 
-        const duration = [startDate, endDate];
         const numberOfDays = countNumberOfDays(startDate, endDate);
+        duration = numberOfDays+1;
 
         day = 1;
 
         createNav(checkErrors(startDate, endDate), tocContainer);
-        createForm(numberOfDays, nextButton, table);
+        createForm(numberOfDays, table);
 
         // nextButton.removeEventListener('click', beginAdventure);
     }
@@ -119,6 +130,23 @@ const generateTableRows = function (tbody, ...elements) {
     tbody.appendChild(tr);
 };
 
+const generateTableHeaders = function (tbody, ...elements) {
+    const tr = document.createElement('tr');
+    elements.map(function (e) {
+        const th = document.createElement('th');
+        th.appendChild(e);
+        tr.appendChild(th);
+    })
+    tbody.appendChild(tr);
+};
+
+const generateLabels = function (id, text) {
+    const label = document.createElement('label');
+    label.setAttribute('for', id);
+    label.innerText = text;
+    return label;
+}
+
 /*
 *  RENDER FORM AFTER BUTTON CLICKED
 */
@@ -129,10 +157,12 @@ const createNav = function (days, container) {
     messageBar.innerHTML = "";
     for(let i=0; i <= days; i++) {
         const li = document.createElement('li');
-        const h2 = document.createElement('h2');
-        h2.innerText = `Day ${i+1}`;
+        li.innerText = `Day ${i+1}`;
         li.id = i+1;
-        li.appendChild(h2);
+        li.className = "list-group-item list-group-item-action";
+        if(li.id == 1) {
+            li.className = "list-group-item list-group-item-action active";
+        }
         li.addEventListener('click', function (e){
             e.preventDefault();
             /*
@@ -143,7 +173,7 @@ const createNav = function (days, container) {
     }
 };
 
-const createForm = function (days, button, ...elements) {
+const createForm = function (days, ...elements) {
     // Remove unnecessary elements
     [...elements].forEach((e) => e.remove());
 
@@ -154,7 +184,27 @@ const createForm = function (days, button, ...elements) {
     createActivityForm();
 
     // Modify Next Button
-    button.innerText = "Next Day";
+    const nextButton = document.createElement('button');
+
+    nextButton.className = 'btn btn-dark btn-lg';
+    nextButton.innerText = duration===1?'End of your trip!':'Next Day';
+    nextButton.id = 'next';
+    nextButton.disabled = duration === 1;
+
+    nextButton.addEventListener('click', function (e) {
+        e.preventDefault();
+        day += 1;
+        const activityList = document.querySelector('#details-container');
+        document.getElementById(`${day}`).className += ' active';
+        activityList.innerHTML = '';
+        console.log(tripObj)
+        if(day === duration) {
+            this.innerText = 'End of your trip!';
+            this.disabled = true;
+        }
+    });
+
+    document.body.append(nextButton);
 
     const daysArray = [];
 
@@ -164,7 +214,6 @@ const createForm = function (days, button, ...elements) {
     }
 
     tripObj.days.push(daysArray);
-    console.log(tripObj);
 
 };
 
@@ -175,18 +224,23 @@ const createHotelForm = function () {
     const hotelInput = document.createElement('input');
     const hotelAddButton = document.createElement('button');
 
-    hotelInput.placeholder = 'Enter your hotel name here';
+    const table = document.createElement('table');
+    const tbody = document.createElement('tbody');
+
+    table.className = 'table table-borderless';
+
+    hotelInput.placeholder = 'Location for hotel search';
+    hotelInput.id = 'hotelInput';
     hotelAddButton.className = 'btn btn-outline-primary mb-3';
     hotelAddButton.innerText = 'Search';
     divForm.className = 'mb-3';
     hotelForm.className = 'row g-3';
 
-    [hotelInput, hotelAddButton].map(function (e) {
-        const div = document.createElement('div');
-        div.className = 'col-auto';
-        div.appendChild(e);
-        hotelForm.appendChild(div);
-    });
+    let hotelLabel = generateLabels(hotelInput.id, "Hotel Search by Location:");
+    generateTableHeaders(tbody, hotelLabel);
+    [hotelInput, hotelAddButton].map(element => generateTableRows(tbody, element));
+    table.append(tbody);
+    hotelForm.append(table);
 
     hotelForm.addEventListener('submit', function (e) {
         e.preventDefault();
@@ -207,7 +261,14 @@ const createActivityForm = function () {
     const startInput = document.createElement('input');
     const endInput = document.createElement('input');
 
+    const table = document.createElement('table');
+    const tbody = document.createElement('tbody');
+
+    table.className = 'table table-borderless';
+
     activityInput.placeholder = 'Type your activity in here.';
+    activityInput.required = true;
+    activityInput.id = 'activityInput';
     activityAddButton.className = 'btn btn-outline-primary mb-3';
     activityAddButton.innerText = 'Add Activity';
     divForm.className = 'mb-3';
@@ -215,23 +276,22 @@ const createActivityForm = function () {
     startInput.type = 'time';
     startInput.min = '00:00'
     startInput.max = '24:00';
+    startInput.required = true;
+    startInput.id = 'startInput';
     endInput.type = 'time';
     endInput.min = '00:00';
     endInput.max = '24:00';
+    endInput.required = true;
+    endInput.id = 'endInput';
 
-    [startInput, endInput].map(function (e) {
-        const div = document.createElement('div');
-        div.className = 'col-auto';
-        div.appendChild(e);
-        activityForm.appendChild(div);
-    });
-
-    [activityInput, activityAddButton].map(function (e) {
-        const div = document.createElement('div');
-        div.className = 'col-auto';
-        div.appendChild(e);
-        activityForm.appendChild(div);
-    });
+    let activityLabel = generateLabels(activityInput.id, "Activity");
+    let startLabel = generateLabels(startInput.id, "Start Time");
+    let endLabel = generateLabels(endInput.id, "End Time");
+    generateTableHeaders(tbody, activityLabel, startLabel, endLabel);
+    generateTableRows(tbody, activityInput, startInput, endInput);
+    generateTableRows(tbody, activityAddButton);
+    table.append(tbody);
+    activityForm.append(table);
 
     activityForm.addEventListener('submit', function (e) {
         e.preventDefault();
@@ -244,9 +304,13 @@ const createActivityForm = function () {
 
         detailsContainer.append(h5, p);
 
-        const newActivity = new Activity(startInput.value, endInput.value, activityInput.value, tripID);
+        const activity = {
+            description: activityInput.value,
+            startTime: startInput.value,
+            endTime: endInput.value
+        };
 
-        tripObj.days[day-1].activity.push(newActivity);
+        tripObj.days[0][day-1].activity.push(activity);
 
         activityForm.reset();
     });

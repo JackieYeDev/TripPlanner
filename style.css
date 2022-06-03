@@ -17,6 +17,13 @@ h1 {
     font-size: 125px;
 }
 
+h3 {
+    color: #ffffff;
+    font-family: SummerLoving;
+    font-size: 50px;
+}
+
+
 body {
     background-size: 100% 100%;
     background-attachment: fixed;
@@ -51,7 +58,9 @@ body {
 #navigation-container::-webkit-scrollbar {
     display: none;
 }
-
+ul li {
+    font-size: 20px;
+}
 #content-container {
     display: inline-block;
     border: black thick;
@@ -84,38 +93,38 @@ body {
 }
 
 #next {
-    justify-content: center;
+    /*justify-content: center;*/
     position:absolute;
-    display: block;
+    /*display: block;*/
     right: 15%;
     bottom: 25%;
-    /* Round out the button */
-    border-radius: 10px;
-    border: 1px solid silver;
-    /* Color schema for button */
-    background-color: white;
-    opacity: 95%;
-    /* Button dimensions */
-    width: 250px;
-    height: 50px;
-    /* Font styling inside button */
-    font-size: 14px;
-    text-align: center;
-    font-family: monospace;
-    font-weight: bolder;
+    /*!* Round out the button *!*/
+    /*border-radius: 10px;*/
+    /*border: 1px solid silver;*/
+    /*!* Color schema for button *!*/
+    /*background-color: white;*/
+    /*opacity: 95%;*/
+    /*!* Button dimensions *!*/
+    /*width: 250px;*/
+    /*height: 50px;*/
+    /*!* Font styling inside button *!*/
+    /*font-size: 14px;*/
+    /*text-align: center;*/
+    /*font-family: monospace;*/
+    /*font-weight: bolder;*/
 }
 
-ul {
-    background-color: rgba(180,176,170,0.05);
-    opacity: 100%;
-}
-ul li{
-    /*color: #e7e70b;*/
-    color: #ffffff;
-    font-family: Herculanum;
-}
-ul li :hover{
-    /*color: #e7e70b;*/
-    background-color: #7e7e7e;
-    opacity: 50%;
-}
+/*ul {*/
+/*    background-color: rgba(180,176,170,0.05);*/
+/*    opacity: 100%;*/
+/*}*/
+/*ul li{*/
+/*    !*color: #e7e70b;*!*/
+/*    color: #ffffff;*/
+/*    font-family: Herculanum;*/
+/*}*/
+/*ul li :hover{*/
+/*    !*color: #e7e70b;*!*/
+/*    background-color: #7e7e7e;*/
+/*    opacity: 50%;*/
+/*}*/
