@@ -164,23 +164,20 @@ const createNav = function (days, duration, container) {
     messageBar.innerHTML = "";
     for(let i=0; i <= days; i++) {
         const li = document.createElement('li');
-        /*
-         *  @TODO: Modify li.innerText to YYYY-MM-DD : Day ${i+1}
-         */
         li.innerText = `${incrementDay(duration[0], i)} (Day ${i+1})`;
-        /*
-         *  @TODO: Modify li.id to YYYY-MM-DD
-         */
         li.id = i+1;
+        li.name = `${incrementDay(duration[0], i)}`;
         li.className = "list-group-item list-group-item-action";
         if(li.id == 1) {
             li.className = "list-group-item list-group-item-action active";
         }
         li.addEventListener('click', function (e){
             e.preventDefault();
-            /*
-            Code to load activities
-             */
+            if(li.classList.contains('active')) {
+                loadDate(li.id);
+            } else {
+                return false;
+            }
         })
         container.appendChild(li);
     }
@@ -199,33 +196,22 @@ const createForm = function (days, ...elements) {
     // Modify Next Button
     const nextButton = document.createElement('button');
 
-    /*
-    *  @TODO: Modify nextButton's text to "Summarize" at the end
-    */
-
     nextButton.className = 'btn btn-dark btn-lg';
     nextButton.innerText = duration===1?'Summary of trip!':'Next Day';
-    nextButton.disabled = duration === 1;
-
     nextButton.addEventListener('click', function (e) {
         e.preventDefault();
-        day += 1;
-        const activityList = document.querySelector('#details-container');
-        document.getElementById(`${day}`).className += ' active';
-        activityList.innerHTML = '';
-        console.log(tripObj)
-        if(day === duration) {
-            this.innerText = 'Summary of trip!';
-            /*
-             * @TODO: Turn disabled off once, summarize is implemented
-             */
-            this.disabled = true;
-        }
-
-        /*
-        *  @TODO: Add summarize function to render modal with all the Activities listed for the trip.
-        *    Also remove button's current event listener/callback function
-        */
+        if (day < duration) {
+            day += 1;
+            const activityList = document.querySelector('#details-container');
+            document.getElementById(`${day}`).className += ' active';
+            activityList.innerHTML = '';
+            console.log(tripObj);
+            if (day === duration) {
+                nextButton.innerText = 'Summary of trip!';
+            }
+        } else {
+            summaryDialog()
+        };
     });
 
     document.getElementById('content-container').append(nextButton);
@@ -272,9 +258,8 @@ const createHotelForm = function () {
     hotelAddButton.innerText = 'Search';
     divForm.className = 'mb-3';
     hotelForm.className = 'row g-3';
-    /*
-    *  @TODO: Add start and end date for Hotel stay
-    */
+
+
     const hotelLabel = generateLabels(hotelInput.id, "Hotel Search by Location:");
     const checkInDateLabel = generateLabels("checkInDate", "Check In Date:");
     const checkOutDateLabel = generateLabels("checkOutDate", "Check Out Date:");
@@ -346,11 +331,11 @@ const createActivityForm = function () {
         p.innerText = `${activityInput.value}`;
 
         /*
-        *  @TODO: Create an edit button with function to edit it's corresponding entry in tribObj
+        *  @TODO: Create an edit button with function to edit it's corresponding entry in tripObj
         */
 
         /*
-        *  @TODO: Create a delete button with function to delete it's corresponding entry from tribObj
+        *  @TODO: Create a delete button with function to delete it's corresponding entry from tripObj
         */
         button.type = 'button';
         button.className = 'btn-close btn-close-white btn-sm';
@@ -430,7 +415,7 @@ const queryHotels = async function (query) {
         .then(data => data)
         .catch(err => console.error(err));
 
-    createModal(jsonData.results.slice(0, 6), durationInDate);
+    createHotelModal(jsonData.results.slice(0, 6), durationInDate);
     //
     // let jsonData = await fetch(proxyServerURL+query, configuration)
     //     .then(response => response.json())
@@ -441,7 +426,7 @@ const queryHotels = async function (query) {
     // createModal(jsonData.results);
 }
 
-const createModal = function (data, ...params) {
+const createHotelModal = function (data, ...params) {
     const divModal = document.querySelector('#resultsModal');
     const buttonModalClose = document.createElement('button');
     const modalTitle = document.createElement('h5');
@@ -459,8 +444,8 @@ const createModal = function (data, ...params) {
     buttonModalClose.type = 'button';
     buttonModalClose.addEventListener('click', function (e) {
         e.preventDefault();
-        divModal.style.display = 'none'
-        divModal.innerHTML = ''
+        divModal.style.display = 'none';
+        divModal.innerHTML = '';
     })
     divDialog.className = 'modal-dialog modal-xl';
     divContent.className = 'modal-content';
@@ -468,10 +453,10 @@ const createModal = function (data, ...params) {
     modalTitle.className = 'modal-title';
     modalTitle.innerText = 'Hotel Search Results';
     divBody.className = 'modal-body';
-    cardGroup.className = 'row row-cols-1 row-cols-md-3 g-4';
-    data.forEach((d) => createCard(cardGroup, divModal, params[0], d));
-    divBody.append(cardGroup);
     divBody.style.overflow = 'scroll';
+    cardGroup.className = 'row row-cols-1 row-cols-md-3 g-4';
+    data.forEach((d) => createHotelCard(cardGroup, divModal, params[0], d));
+    divBody.append(cardGroup);
     divHeader.append(modalTitle, buttonModalClose);
     divContent.append(divHeader, divBody);
     divDialog.appendChild(divContent);
@@ -480,7 +465,7 @@ const createModal = function (data, ...params) {
     divModal.style.display = 'block';
 }
 
-const createCard = function (cardGroup, modal, dates, data) {
+const createHotelCard = function (cardGroup, modal, dates, data) {
     const card = document.createElement('div');
     const cardHeader = document.createElement('div');
     const title = document.createElement('h5');
@@ -515,11 +500,11 @@ const createCard = function (cardGroup, modal, dates, data) {
             checkOutDate: dates[1]
         }
         addHotel(address);
+        /*
+         * @TODO: Add checkin and checkout dates to activity [3:00pm Checkin; 12:00pm Checkout Typ.]
+         */
         tripObj.hotels.push(hotel);
         console.log(tripObj);
-        /*
-         * @TODO: Add Hotel data into tripObj Object
-         */
     });
 
     cardBody.className = 'card-body';
@@ -539,13 +524,90 @@ const addHotel = function (address) {
     h5.innerHTML = '<u>Hotel Information</u>';
     p.innerHTML = address;
     detailsContainer.append(h5, p);
+};
+
+const loadDate = function (date) {
+    const detailsContainer = document.querySelector('div#details-container');
+    detailsContainer.innerHTML = "";
+    tripObj.days[0][date-1].activity.forEach(function (e) {
+        const h5 = document.createElement('h5');
+        const p = document.createElement('p');
+        // const button = document.createElement('button');
+
+        h5.innerHTML = `<u>${e.startTime} - ${e.endTime}</u>`;
+        p.innerText = `${e.description}`;
+
+        detailsContainer.append(h5, p);
+    });
+
+
 
     /*
-    *  @TODO: Add Hotel to tripObj Object
-    */
-}
+     *  @TODO: Create an edit button with function to edit it's corresponding entry in tripObj
+     */
 
+    /*
+     *  @TODO: Create a delete button with function to delete it's corresponding entry from tripObj
+     */
+    // button.type = 'button';
+    // button.className = 'btn-close btn-close-white btn-sm';
+    // button.addEventListener('click', function (e) {
+    //     e.preventDefault();
+    //     this.remove();
+    // });
+    // h5.append(button);
+};
+
+
+const summaryDialog = function () {
+    const divModal = document.createElement('div');
+    const divHeader = document.createElement('div');
+    const divBody = document.createElement('div');
+    const divDialog = document.createElement('div');
+    const divContent = document.createElement('div');
+    const buttonModalClose = document.createElement('button');
+    const modalTitle = document.createElement('h5');
+
+    divModal.className = 'modal fade';
+    divModal.setAttribute('tabIndex', '-1');
+    divModal.setAttribute('role', 'dialog');
+    divModal.ariaHidden = 'true';
+    divModal.setAttribute('aria-labelledby', 'summaryDialogLabel');
+
+    divDialog.className = 'modal-dialog modal-lg';
+    divContent.className = 'modal-content';
+    divHeader.className = 'modal-header';
+    modalTitle.className = 'modal-title';
+    modalTitle.innerText = `${tripObj.tripName.toUpperCase()}`;
+    divBody.className = 'modal-body';
+    divBody.style.overflow = 'scroll';
+
+    const hotel = tripObj.hotels[0] === undefined? "None" : `${tripObj.hotels[0].address}`;
+
+    divBody.innerHTML = `<h2>Hotel</h2><ul class="list-group"><li class="list-group-item">${hotel}</li></ul>`;
+
+    buttonModalClose.className = 'btn-close';
+    buttonModalClose.type = 'button';
+    buttonModalClose.addEventListener('click', function (e) {
+        e.preventDefault();
+        divModal.style.display = 'none';
+        divModal.innerHTML = '';
+    });
+
+    divHeader.append(modalTitle, buttonModalClose);
+    divContent.append(divHeader, divBody);
+    divDialog.appendChild(divContent);
+    divModal.appendChild(divDialog);
+
+    divModal.classList.add("show");
+    divModal.style.display = 'block';
+
+    document.body.append(divModal);
+};
 
 /*
-*  @TODO: Create a load date's activity function
+*  @TODO: Create a load summary function
 */
+const loadSummary = function () {
+    // Create modal
+};
