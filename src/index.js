@@ -1,11 +1,13 @@
 // Constructor for tripObj
 const tripObj = {
     tripName: "",
-    days: []
+    days: [],
+    hotels: []
 }
 
 let day;
 let duration;
+let durationInDate;
 
 document.addEventListener("DOMContentLoaded", init);
 
@@ -100,18 +102,23 @@ function init() {
             return false;
         }
 
+
         titleP.innerHTML += `<p><h3>${tripNameInput.value}</h3></p>`
 
         messageBar.innerHTML = '';
         messageBar.removeAttribute('class');
         messageBar.removeAttribute('role');
 
+        durationInDate = [startDate.value, endDate.value];
         const numberOfDays = countNumberOfDays(startDate, endDate);
         duration = numberOfDays+1;
 
+        // Start day to input
         day = 1;
 
-        createNav(checkErrors(startDate, endDate), tocContainer);
+        tripObj.tripName = tripNameInput.value;
+
+        createNav(checkErrors(startDate, endDate), durationInDate, tocContainer);
         createForm(numberOfDays, table);
 
         // nextButton.removeEventListener('click', beginAdventure);
@@ -151,7 +158,7 @@ const generateLabels = function (id, text) {
 *  RENDER FORM AFTER BUTTON CLICKED
 */
 
-const createNav = function (days, container) {
+const createNav = function (days, duration, container) {
     if (days === false) return false;
     const messageBar = document.querySelector('#message-bar');
     messageBar.innerHTML = "";
@@ -160,7 +167,7 @@ const createNav = function (days, container) {
         /*
          *  @TODO: Modify li.innerText to YYYY-MM-DD : Day ${i+1}
          */
-        li.innerText = `Day ${i+1}`;
+        li.innerText = `${incrementDay(duration[0], i)} (Day ${i+1})`;
         /*
          *  @TODO: Modify li.id to YYYY-MM-DD
          */
@@ -197,8 +204,7 @@ const createForm = function (days, ...elements) {
     */
 
     nextButton.className = 'btn btn-dark btn-lg';
-    nextButton.innerText = duration===1?'End of your trip!':'Next Day';
-    nextButton.id = 'next';
+    nextButton.innerText = duration===1?'Summary of trip!':'Next Day';
     nextButton.disabled = duration === 1;
 
     nextButton.addEventListener('click', function (e) {
@@ -209,16 +215,20 @@ const createForm = function (days, ...elements) {
         activityList.innerHTML = '';
         console.log(tripObj)
         if(day === duration) {
-            this.innerText = 'End of your trip!';
+            this.innerText = 'Summary of trip!';
+            /*
+             * @TODO: Turn disabled off once, summarize is implemented
+             */
             this.disabled = true;
         }
 
         /*
-        *  @TODO: Add summarize function to render modal with all the Activities listed for the trip
+        *  @TODO: Add summarize function to render modal with all the Activities listed for the trip.
+        *    Also remove button's current event listener/callback function
         */
     });
 
-    document.body.append(nextButton);
+    document.getElementById('content-container').append(nextButton);
 
     const daysArray = [];
 
@@ -237,12 +247,25 @@ const createHotelForm = function () {
     const hotelForm = document.createElement('form');
     const hotelInput = document.createElement('input');
     const hotelAddButton = document.createElement('button');
+    const checkInDate = document.createElement('input');
+    const checkOutDate = document.createElement('input');
+
 
     const table = document.createElement('table');
     const tbody = document.createElement('tbody');
 
     table.className = 'table table-borderless';
 
+    checkInDate.id = 'checkInDate';
+    checkInDate.type = 'date';
+    checkInDate.value = durationInDate[0];
+    checkInDate.min = decrementDay(durationInDate[0]);
+    checkInDate.max = incrementDay(durationInDate[1]);
+    checkOutDate.id = 'checkOutDate';
+    checkOutDate.type = 'date';
+    checkOutDate.value = durationInDate[1];
+    checkOutDate.min = decrementDay(durationInDate[0]);
+    checkOutDate.max = incrementDay(durationInDate[1]);
     hotelInput.placeholder = 'Location for hotel search';
     hotelInput.id = 'hotelInput';
     hotelAddButton.className = 'btn btn-outline-primary mb-3';
@@ -252,9 +275,12 @@ const createHotelForm = function () {
     /*
     *  @TODO: Add start and end date for Hotel stay
     */
-    let hotelLabel = generateLabels(hotelInput.id, "Hotel Search by Location:");
-    generateTableHeaders(tbody, hotelLabel);
-    [hotelInput, hotelAddButton].map(element => generateTableRows(tbody, element));
+    const hotelLabel = generateLabels(hotelInput.id, "Hotel Search by Location:");
+    const checkInDateLabel = generateLabels("checkInDate", "Check In Date:");
+    const checkOutDateLabel = generateLabels("checkOutDate", "Check Out Date:");
+    generateTableHeaders(tbody, hotelLabel, checkInDateLabel, checkOutDateLabel);
+    generateTableRows(tbody, hotelInput, checkInDate, checkOutDate);
+    generateTableRows(tbody, hotelAddButton);
     table.append(tbody);
     hotelForm.append(table);
 
@@ -300,9 +326,9 @@ const createActivityForm = function () {
     endInput.required = true;
     endInput.id = 'endInput';
 
-    let activityLabel = generateLabels(activityInput.id, "Activity");
-    let startLabel = generateLabels(startInput.id, "Start Time");
-    let endLabel = generateLabels(endInput.id, "End Time");
+    const activityLabel = generateLabels(activityInput.id, "Activity");
+    const startLabel = generateLabels(startInput.id, "Start Time");
+    const endLabel = generateLabels(endInput.id, "End Time");
     generateTableHeaders(tbody, activityLabel, startLabel, endLabel);
     generateTableRows(tbody, activityInput, startInput, endInput);
     generateTableRows(tbody, activityAddButton);
@@ -343,10 +369,13 @@ const createActivityForm = function () {
         };
 
         tripObj.days[0][day-1].activity.push(activity);
-        /*
-        *  @TODO: Create a sorting function for tribObj.days[0][day-1].activity that will auto-sort on new/delete entry
-        *    based on startTime
-        */
+        tripObj.days[0][day-1].activity.sort(function (a,b){
+            let c = a.startTime.split(":");
+            a = c[0] + c[1];
+            let d = b.startTime.split(":");
+            b = d[0] + d[1];
+            return a - b;
+        });
         activityForm.reset();
     });
 
@@ -357,6 +386,18 @@ const createActivityForm = function () {
 
 const countNumberOfDays = (startDate, endDate) =>
     ((Date.parse(endDate.valueAsDate) - Date.parse(startDate.valueAsDate))/(1000 * 3600 * 24));
+
+const incrementDay = function (dateString, i=1) {
+    let date = new Date(dateString);
+    date.setDate(date.getDate() + i);
+    return date.toISOString().slice(0, 10);
+}
+
+const decrementDay = function (dateString, i=1) {
+    let date = new Date(dateString);
+    date.setDate(date.getDate() - i);
+    return date.toISOString().slice(0, 10);
+}
 
 const checkErrors = function (start, end) {
     const days = countNumberOfDays(start, end);
@@ -389,7 +430,7 @@ const queryHotels = async function (query) {
         .then(data => data)
         .catch(err => console.error(err));
 
-    createModal(jsonData.results.slice(0, 6));
+    createModal(jsonData.results.slice(0, 6), durationInDate);
     //
     // let jsonData = await fetch(proxyServerURL+query, configuration)
     //     .then(response => response.json())
@@ -428,7 +469,7 @@ const createModal = function (data, ...params) {
     modalTitle.innerText = 'Hotel Search Results';
     divBody.className = 'modal-body';
     cardGroup.className = 'row row-cols-1 row-cols-md-3 g-4';
-    data.forEach((d) => createCard(cardGroup, divModal, d));
+    data.forEach((d) => createCard(cardGroup, divModal, params[0], d));
     divBody.append(cardGroup);
     divBody.style.overflow = 'scroll';
     divHeader.append(modalTitle, buttonModalClose);
@@ -439,7 +480,7 @@ const createModal = function (data, ...params) {
     divModal.style.display = 'block';
 }
 
-const createCard = function (cardGroup, modal, data) {
+const createCard = function (cardGroup, modal, dates, data) {
     const card = document.createElement('div');
     const cardHeader = document.createElement('div');
     const title = document.createElement('h5');
@@ -467,7 +508,18 @@ const createCard = function (cardGroup, modal, data) {
         e.preventDefault();
         modal.style.display = 'none';
         modal.innerHTML = '';
+        const hotel = {
+            name: data.name,
+            address: address,
+            checkInDate: dates[0],
+            checkOutDate: dates[1]
+        }
         addHotel(address);
+        tripObj.hotels.push(hotel);
+        console.log(tripObj);
+        /*
+         * @TODO: Add Hotel data into tripObj Object
+         */
     });
 
     cardBody.className = 'card-body';
