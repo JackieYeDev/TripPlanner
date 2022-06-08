@@ -116,12 +116,11 @@ function init() {
         // Start day to input
         day = 1;
 
+        // Assign the tripObj a trip name.
         tripObj.tripName = tripNameInput.value;
 
         createNav(checkErrors(startDate, endDate), durationInDate, tocContainer);
         createForm(numberOfDays, table);
-
-        // nextButton.removeEventListener('click', beginAdventure);
     }
 
     nextButton.addEventListener('click', beginAdventure);
@@ -323,9 +322,10 @@ const createActivityForm = function () {
     activityForm.addEventListener('submit', function (e) {
         e.preventDefault();
         const detailsContainer = document.querySelector('div#details-container');
+        const divContainer = document.createElement('div');
         const h5 = document.createElement('h5');
         const p = document.createElement('p');
-        const button = document.createElement('button');
+        const deleteButton = document.createElement('button');
 
         h5.innerHTML = `<u>${startInput.value} - ${endInput.value}</u>`;
         p.innerText = `${activityInput.value}`;
@@ -333,19 +333,19 @@ const createActivityForm = function () {
         /*
         *  @TODO: Create an edit button with function to edit it's corresponding entry in tripObj
         */
-
-        /*
-        *  @TODO: Create a delete button with function to delete it's corresponding entry from tripObj
-        */
-        button.type = 'button';
-        button.className = 'btn-close btn-close-white btn-sm';
-        button.addEventListener('click', function (e) {
+        deleteButton.type = 'button';
+        deleteButton.className = 'btn-close btn-close-white btn-sm';
+        deleteButton.addEventListener('click', function (e) {
             e.preventDefault();
-            this.remove();
+            const index = tripObj.days[0][day-1].activity.indexOf(activity);
+            // div > h5 > button
+            this.parentElement.parentElement.remove();
+            tripObj.days[0][day-1].activity.removeIndex(index);
         });
-        // h5.append(button);
+        h5.append(deleteButton);
+        divContainer.append(h5, p);
 
-        detailsContainer.append(h5, p);
+        detailsContainer.append(divContainer);
 
         const activity = {
             description: activityInput.value,
@@ -354,11 +354,9 @@ const createActivityForm = function () {
         };
 
         tripObj.days[0][day-1].activity.push(activity);
-        tripObj.days[0][day-1].activity.sort(function (a,b){
-            let c = a.startTime.split(":");
-            a = c[0] + c[1];
-            let d = b.startTime.split(":");
-            b = d[0] + d[1];
+        tripObj.days[0][day-1].activity.sort(function (a,b) {
+            a = a.startTime.split(":").reduce((c,d) => c + d);
+            b = b.startTime.split(":").reduce((c, d) => c + d);
             return a - b;
         });
         activityForm.reset();
@@ -367,7 +365,7 @@ const createActivityForm = function () {
     divForm.appendChild(activityForm);
 
     document.querySelector('div#content-container').appendChild(divForm);
-}
+};
 
 const countNumberOfDays = (startDate, endDate) =>
     ((Date.parse(endDate.valueAsDate) - Date.parse(startDate.valueAsDate))/(1000 * 3600 * 24));
@@ -503,6 +501,18 @@ const createHotelCard = function (cardGroup, modal, dates, data) {
         /*
          * @TODO: Add checkin and checkout dates to activity [3:00pm Checkin; 12:00pm Checkout Typ.]
          */
+        const checkInActivity = {
+            description: `Check into hotel`,
+            startTime: `15:00`,
+            endTime: `15:00`
+        };
+        const checkOutActivity = {
+            description: `Check out of hotel`,
+            startTime: `11:00`,
+            endTime: `11:00`
+        };
+        tripObj.days[0][0].activity.push(checkInActivity);
+        //tripObj.days[0][].activity.push(checkOutActivity);
         tripObj.hotels.push(hotel);
         console.log(tripObj);
     });
@@ -529,15 +539,31 @@ const addHotel = function (address) {
 const loadDate = function (date) {
     const detailsContainer = document.querySelector('div#details-container');
     detailsContainer.innerHTML = "";
-    tripObj.days[0][date-1].activity.forEach(function (e) {
+    tripObj.days[0][date-1].activity.forEach(function (e, index) {
+        const activityDiv = document.createElement('div');
         const h5 = document.createElement('h5');
         const p = document.createElement('p');
-        // const button = document.createElement('button');
+        const editButton = document.createElement('button');
+        const deleteButton = document.createElement('button');
 
+        activityDiv.id = `${index}`;
         h5.innerHTML = `<u>${e.startTime} - ${e.endTime}</u>`;
         p.innerText = `${e.description}`;
+        deleteButton.type = 'button';
+        deleteButton.className = 'btn-close btn-close-white btn-sm';
+        h5.append(deleteButton);
+        deleteButton.addEventListener('click', function (e) {
+            e.preventDefault();
+            this.parentElement.parentElement.remove();
+            tripObj.days[0][date-1].activity.removeIndex(index);
+        });
 
-        detailsContainer.append(h5, p);
+        activityDiv.append(h5, p);
+
+        /*
+        *  @TODO: Create an edit button with function to edit it's corresponding entry in tripObj
+        */
+        detailsContainer.append(activityDiv);
     });
 
 
@@ -545,17 +571,6 @@ const loadDate = function (date) {
     /*
      *  @TODO: Create an edit button with function to edit it's corresponding entry in tripObj
      */
-
-    /*
-     *  @TODO: Create a delete button with function to delete it's corresponding entry from tripObj
-     */
-    // button.type = 'button';
-    // button.className = 'btn-close btn-close-white btn-sm';
-    // button.addEventListener('click', function (e) {
-    //     e.preventDefault();
-    //     this.remove();
-    // });
-    // h5.append(button);
 };
 
 
@@ -610,4 +625,18 @@ const summaryDialog = function () {
 */
 const loadSummary = function () {
     // Create modal
+};
+
+Array.prototype.removeIndex = function (index) {
+    const a = [];
+    for (let i = 0; i < this.length; i++) {
+        if(i !== index) {
+            a.push(this[i]);
+        }
+    }
+    while(this.length > 0) {
+        this.pop();
+    };
+    a.map((ele) => this.push(ele));
+    return this;
 };

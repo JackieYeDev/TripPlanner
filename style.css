@@ -115,6 +115,10 @@ ul li {
     /*font-weight: bolder;*/
 }
 
+label {
+    color: black;
+}
+
 /*ul {*/
 /*    background-color: rgba(180,176,170,0.05);*/
 /*    opacity: 100%;*/
