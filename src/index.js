@@ -218,7 +218,11 @@ const createForm = function (days, ...elements) {
     const daysArray = [];
 
     for(let i=0; i <= days; i++) {
-        const day = {day: i+1, activity:[]};
+        const day = {
+            day: i+1,
+            date: incrementDay(durationInDate[0], i),
+            activity:[]
+        };
         daysArray.push(day);
     }
 
@@ -497,24 +501,24 @@ const createHotelCard = function (cardGroup, modal, dates, data) {
             checkInDate: dates[0],
             checkOutDate: dates[1]
         }
+
         addHotel(address);
-        /*
-         * @TODO: Add checkin and checkout dates to activity [3:00pm Checkin; 12:00pm Checkout Typ.]
-         */
+
+        const startIndex = tripObj.days[0].findIndex((e) => e.date === dates[0]);
+        const endIndex = tripObj.days[0].findIndex((e) => e.date === dates[1]);
         const checkInActivity = {
-            description: `Check into hotel`,
+            description: `Check into hotel (${data.name})`,
             startTime: `15:00`,
-            endTime: `15:00`
+            endTime: `16:00`
         };
         const checkOutActivity = {
-            description: `Check out of hotel`,
+            description: `Check out hotel (${data.name})`,
             startTime: `11:00`,
-            endTime: `11:00`
+            endTime: `12:00`
         };
-        tripObj.days[0][0].activity.push(checkInActivity);
-        //tripObj.days[0][].activity.push(checkOutActivity);
+        tripObj.days[0][startIndex].activity.push(checkInActivity);
+        tripObj.days[0][endIndex].activity.push(checkOutActivity);
         tripObj.hotels.push(hotel);
-        console.log(tripObj);
     });
 
     cardBody.className = 'card-body';
