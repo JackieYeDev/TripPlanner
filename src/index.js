@@ -34,7 +34,7 @@ function init() {
     const form = document.createElement('form');
     form.id = "dates-form";
 
-    // Create Fillable Inputs
+    // Create Fill-able Inputs
     const table = document.createElement('table');
     const tbody = document.createElement('tbody');
 
@@ -84,7 +84,7 @@ function init() {
     formContainer.appendChild(form);
 
     // Set Attributes to Next Button
-    const beginAdventure = function (e) {
+    const beginAdventure = function () {
         // e.preventDefault();
         // Prevent Empty Input
 
@@ -210,7 +210,7 @@ const createForm = function (days, ...elements) {
             }
         } else {
             summaryDialog()
-        };
+        }
     });
 
     document.getElementById('content-container').append(nextButton);
@@ -329,6 +329,7 @@ const createActivityForm = function () {
         const divContainer = document.createElement('div');
         const h5 = document.createElement('h5');
         const p = document.createElement('p');
+        const editButton = document.createElement('button');
         const deleteButton = document.createElement('button');
 
         h5.innerHTML = `<u>${startInput.value} - ${endInput.value}</u>`;
@@ -337,8 +338,16 @@ const createActivityForm = function () {
         /*
         *  @TODO: Create an edit button with function to edit it's corresponding entry in tripObj
         */
+        editButton.type = 'button';
+        editButton.className = 'btn btn-success btn-sm rounded-0';
+        editButton.innerHTML = `<i class="fa fa-edit"></i>`;
+        editButton.addEventListener('click', function (e) {
+            e.preventDefault();
+        })
+
         deleteButton.type = 'button';
-        deleteButton.className = 'btn-close btn-close-white btn-sm';
+        deleteButton.className = 'btn btn-danger btn-sm rounded-0';
+        deleteButton.innerHTML = `<i class="fa fa-trash"></i>`;
         deleteButton.addEventListener('click', function (e) {
             e.preventDefault();
             const index = tripObj.days[0][day-1].activity.indexOf(activity);
@@ -346,7 +355,7 @@ const createActivityForm = function () {
             this.parentElement.parentElement.remove();
             tripObj.days[0][day-1].activity.removeIndex(index);
         });
-        h5.append(deleteButton);
+        h5.append(editButton, deleteButton);
         divContainer.append(h5, p);
 
         detailsContainer.append(divContainer);
@@ -553,14 +562,23 @@ const loadDate = function (date) {
         activityDiv.id = `${index}`;
         h5.innerHTML = `<u>${e.startTime} - ${e.endTime}</u>`;
         p.innerText = `${e.description}`;
+
+        editButton.type = 'button';
+        editButton.className = 'btn btn-success btn-sm rounded-0';
+        editButton.innerHTML = `<i class="fa fa-edit"></i>`;
+        editButton.addEventListener('click', function (e) {
+            e.preventDefault();
+        });
+
         deleteButton.type = 'button';
-        deleteButton.className = 'btn-close btn-close-white btn-sm';
-        h5.append(deleteButton);
+        deleteButton.className = 'btn btn-danger btn-sm rounded-0';
+        deleteButton.innerHTML = `<i class="fa fa-trash"></i>`;
         deleteButton.addEventListener('click', function (e) {
             e.preventDefault();
             this.parentElement.parentElement.remove();
             tripObj.days[0][date-1].activity.removeIndex(index);
         });
+        h5.append(editButton, deleteButton);
 
         activityDiv.append(h5, p);
 
@@ -601,9 +619,12 @@ const summaryDialog = function () {
     divBody.className = 'modal-body';
     divBody.style.overflow = 'scroll';
 
-    const hotel = tripObj.hotels[0] === undefined? "None" : `${tripObj.hotels[0].address}`;
+    const hotel = tripObj.hotels.length === 0? "None" : tripObj.hotels;
+    createListing(divBody,'Hotel', hotel.map(hotel => hotel.address));
 
-    divBody.innerHTML = `<h2>Hotel</h2><ul class="list-group"><li class="list-group-item">${hotel}</li></ul>`;
+
+    const activities = tripObj.days[0]
+    createListing(divBody, 'Activity', formatSingleActivity(activities))
 
     buttonModalClose.className = 'btn-close';
     buttonModalClose.type = 'button';
@@ -624,12 +645,39 @@ const summaryDialog = function () {
     document.body.append(divModal);
 };
 
-/*
-*  @TODO: Create a load summary function
-*/
-const loadSummary = function () {
-    // Create modal
+const createListing = function (container, heading, listItems ) {
+    const h2 = document.createElement('h2');
+    const ul = document.createElement('ul');
+
+    h2.innerText = heading;
+    ul.className = 'list-group';
+
+    [...listItems].forEach(function (item) {
+        const li = document.createElement('li');
+        li.className = 'list-group-item';
+        li.innerHTML = item;
+        ul.appendChild(li);
+    });
+
+    container.append(h2, ul);
 };
+
+const formatSingleActivity = function (activity) {
+    const formattedResult = [];
+    Object.keys(activity).forEach(key => {
+        let a = activity[key];
+        let response = `<strong>Day ${a.day} - ${a.date}</strong><br>`;
+        if (a.activity.length === 0 ) {
+            response += `<p>No Activities</p>`
+        } else {
+            a.activity.forEach(act => response += `<u>${act.startTime} - ${act.endTime}</u><p>${act.description}</p>`)
+        }
+        formattedResult.push(response);
+    });
+
+    console.log(formattedResult);
+    return formattedResult;
+}
 
 Array.prototype.removeIndex = function (index) {
     const a = [];
