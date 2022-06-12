@@ -1,3 +1,93 @@
+class Trip {
+    constructor(name, days = []) {
+        this.name = name || "";
+        this.days = days || [];
+    }
+    createDaysHTML() {
+        const daysArray = this.days.map(function (d) {
+            const li = document.createElement('li');
+            li.id = d.day;
+            li.innerText = `${d.date} (Day ${d.day}`;
+            li.className = 'list-group-item list-group-item-action';
+        });
+        return daysArray;
+    }
+    createDays(startDate, endDate) {
+        const numberOfDays = countNumberOfDays(startDate, endDate) + 1;
+        console.log(incrementDay(startDate.value));
+        for(let i = 0; i < numberOfDays; i++) {
+            const day = new Day(i+1, incrementDay(startDate.value, i), []);
+            this.setDays(day);
+        }
+    }
+    setDays(day) {
+        this.days.push(day);
+    }
+    getDays() {
+        console.log(this.days);
+    }
+    setName(name) {
+        this.name = name;
+    }
+    getName() {
+        console.log(this.name);
+    }
+}
+
+// Helper class for Trip
+class Day {
+    constructor(day, date, activities = []) {
+        this.day = day;
+        this.date = date;
+        this.activities = activities || [];
+    }
+    setActivity(Activity) {
+        this.activities.push(Activity);
+    }
+    createActivityHTMLArray() {
+        const activityArray = this.activities.map((a) => a.createActivityHTML());
+        return activityArray;
+    }
+}
+
+class Activity {
+    constructor(startTime, endTime, description) {
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.description = description;
+    }
+    createActivityHTML() {
+        const div = document.createElement('div');
+        const h5 = document.createElement('h5');
+        const u = document.createElement('u');
+        const p = document.createElement('p');
+        u.innerText = `${this.startTime} - ${this.endTime}`;
+        h5.appendChild(u);
+        p.innerText = this.description;
+        div.append(h5, p);
+        return div;
+    }
+    editActivity(startTime, endTime, description) {
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.description = description;
+    }
+}
+
+class Hotel {
+    constructor(name, startDate, endDate, address) {
+        this.name = name;
+        this.address = address;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.init();
+    }
+
+    init() {
+        const checkoutActivity = new Activity('11:00', '12:00', `Check out of Hotel (${this.name})`);
+        const checkinActivity = new Activity('15:00', '16:00', `Check into Hotel (${this.name})`);
+    }
+}
 // Constructor for tripObj
 const tripObj = {
     tripName: "",
@@ -5,9 +95,15 @@ const tripObj = {
     hotels: []
 }
 
+const tripName = tripObj.tripName;
+const tripDays = tripObj.days;
+const tripHotels = tripObj.hotels;
+
 let day;
 let duration;
 let durationInDate;
+
+const trip = new Trip();
 
 document.addEventListener("DOMContentLoaded", init);
 
@@ -117,6 +213,10 @@ function init() {
         day = 1;
 
         // Assign the tripObj a trip name.
+        trip.setName(tripNameInput.value);
+        trip.createDays(startDate, endDate);
+        trip.getDays();
+        // @TODO: Delete after class transition
         tripObj.tripName = tripNameInput.value;
 
         createNav(checkErrors(startDate, endDate), durationInDate, tocContainer);
@@ -343,6 +443,10 @@ const createActivityForm = function () {
         editButton.innerHTML = `<i class="fa fa-edit"></i>`;
         editButton.addEventListener('click', function (e) {
             e.preventDefault();
+            const index = tripObj.days[0][day-1].activity.indexOf(activity);
+            const enableEdit = document.querySelector(`div#${index}`);
+            enableEdit.setAttribute('contentEditable', true);
+
         })
 
         deleteButton.type = 'button';
@@ -692,3 +796,6 @@ Array.prototype.removeIndex = function (index) {
     a.map((ele) => this.push(ele));
     return this;
 };
+
+
+// @TODO: Fix Hotel Add Activity
