@@ -1,20 +1,31 @@
 class Trip {
-    constructor(name, days = []) {
+    constructor(name, days = [], hotels = []) {
         this.name = name || "";
         this.days = days || [];
+        this.hotels = hotels || [];
     }
     createDaysHTML() {
         const daysArray = this.days.map(function (d) {
             const li = document.createElement('li');
             li.id = d.day;
-            li.innerText = `${d.date} (Day ${d.day}`;
+            li.innerText = `${d.date} (Day ${d.day})`;
             li.className = 'list-group-item list-group-item-action';
+            if(d.day === 1) {
+                li.classList.add('active');
+            }
+            li.addEventListener('click', function () {
+                if(li.classList.contains('active')) {
+                    loadDate(li.id);
+                } else {
+                    return false;
+                }
+            })
+            return li;
         });
         return daysArray;
     }
     createDays(startDate, endDate) {
         const numberOfDays = countNumberOfDays(startDate, endDate) + 1;
-        console.log(incrementDay(startDate.value));
         for(let i = 0; i < numberOfDays; i++) {
             const day = new Day(i+1, incrementDay(startDate.value, i), []);
             this.setDays(day);
@@ -23,14 +34,29 @@ class Trip {
     setDays(day) {
         this.days.push(day);
     }
-    getDays() {
-        console.log(this.days);
+    getDaysListing() {
+        const array = this.days.map(d => d.createActivityHTMLListingArray())
+        return array;
+    }
+    queryDate(date) {
+        const dateRef = this.days.filter(d => d.date === date);
+        return dateRef;
+    }
+    queryDay(day) {
+        const dayRef = this.days.filter(d => d.day === day);
+        return dayRef;
     }
     setName(name) {
         this.name = name;
     }
     getName() {
-        console.log(this.name);
+        return this.name;
+    }
+    setHotel(hotel) {
+        this.hotels.push(hotel);
+    }
+    getHotel() {
+        return this.hotels;
     }
 }
 
@@ -43,10 +69,42 @@ class Day {
     }
     setActivity(Activity) {
         this.activities.push(Activity);
+        this.sortActivities();
+    }
+    getActivity(){
+
     }
     createActivityHTMLArray() {
         const activityArray = this.activities.map((a) => a.createActivityHTML());
         return activityArray;
+    }
+    createActivityHTMLListingArray(){
+        const div = document.createElement('div');
+        const strong = document.createElement('strong');
+        strong.innerText = `Day ${this.day} - ${this.date}`;
+        div.append(strong);
+        if (this.activities.length != 0) {
+            this.activities.map(function (a)  {
+                const array = a.createActivityListingHTML();
+                div.append(array);
+            });
+        } else {
+            const p = document.createElement('p');
+            p.innerText = "No Activities";
+            div.append(p);
+        }
+
+        return div;
+    }
+    sortActivities() {
+        this.activities.sort(function (a,b) {
+            a = a.startTime.split(":").reduce((c, d) => c + d);
+            b = b.startTime.split(":").reduce((c, d) => c + d);
+            return a - b;
+        })
+    }
+    deleteActivity() {
+
     }
 }
 
@@ -65,6 +123,15 @@ class Activity {
         h5.appendChild(u);
         p.innerText = this.description;
         div.append(h5, p);
+        return div;
+    }
+    createActivityListingHTML() {
+        const div = document.createElement('div')
+        const u = document.createElement('u');
+        const p = document.createElement('p');
+        u.innerText = `${this.startTime} - ${this.endTime}`;
+        p.innerText = `${this.description}`;
+        div.append(u, p);
         return div;
     }
     editActivity(startTime, endTime, description) {
@@ -86,6 +153,33 @@ class Hotel {
     init() {
         const checkoutActivity = new Activity('11:00', '12:00', `Check out of Hotel (${this.name})`);
         const checkinActivity = new Activity('15:00', '16:00', `Check into Hotel (${this.name})`);
+        let myRef = trip.queryDate(this.startDate);
+        myRef[0].setActivity(checkinActivity);
+        myRef = trip.queryDate(this.endDate);
+        myRef[0].setActivity(checkoutActivity);
+    }
+
+    createHTMLAddress() {
+        const div = document.createElement('div');
+        const strong = document.createElement('strong');
+        strong.innerText = this.name;
+        div.appendChild(strong);
+
+        (function address1(address) {
+            const span = document.createElement('span');
+            const br = document.createElement('br');
+            span.innerText = address[0];
+            div.append(br,span);
+        }) (this.address);
+
+        (function addressCityAndState(address) {
+            const span = document.createElement('span');
+            const br = document.createElement('br');
+            span.innerText = address[1] + "," + address[2];
+            div.append(br,span);
+        }) (this.address);
+
+        return div;
     }
 }
 // Constructor for tripObj
@@ -180,8 +274,8 @@ function init() {
     formContainer.appendChild(form);
 
     // Set Attributes to Next Button
-    const beginAdventure = function () {
-        // e.preventDefault();
+    const beginAdventure = function (e) {
+        e.preventDefault();
         // Prevent Empty Input
 
         if(tripNameInput.value === "") {
@@ -198,9 +292,16 @@ function init() {
             return false;
         }
 
+        const isValidDates = validateDates(startDate, endDate)
 
-        titleP.innerHTML += `<p><h3>${tripNameInput.value}</h3></p>`
+        if(isValidDates === false) {
+            messageBar.className = 'alert alert-danger';
+            messageBar.setAttribute('role','alert');
+            messageBar.innerText = 'Please enter a valid start and end date!';
+            return false;
+        }
 
+        // Clears the message bar (if any messages were previously present)
         messageBar.innerHTML = '';
         messageBar.removeAttribute('class');
         messageBar.removeAttribute('role');
@@ -215,11 +316,16 @@ function init() {
         // Assign the tripObj a trip name.
         trip.setName(tripNameInput.value);
         trip.createDays(startDate, endDate);
-        trip.getDays();
-        // @TODO: Delete after class transition
-        tripObj.tripName = tripNameInput.value;
 
-        createNav(checkErrors(startDate, endDate), durationInDate, tocContainer);
+        console.log(trip)
+
+        titleP.innerHTML += `<p><h3>${trip.getName()}</h3></p>`;
+        let ref = trip.queryDate(startDate.value);
+
+        console.log(ref[0]);
+
+
+        createNav(duration, durationInDate, tocContainer);
         createForm(numberOfDays, table);
     }
 
@@ -261,25 +367,8 @@ const createNav = function (days, duration, container) {
     if (days === false) return false;
     const messageBar = document.querySelector('#message-bar');
     messageBar.innerHTML = "";
-    for(let i=0; i <= days; i++) {
-        const li = document.createElement('li');
-        li.innerText = `${incrementDay(duration[0], i)} (Day ${i+1})`;
-        li.id = i+1;
-        li.name = `${incrementDay(duration[0], i)}`;
-        li.className = "list-group-item list-group-item-action";
-        if(li.id == 1) {
-            li.className = "list-group-item list-group-item-action active";
-        }
-        li.addEventListener('click', function (e){
-            e.preventDefault();
-            if(li.classList.contains('active')) {
-                loadDate(li.id);
-            } else {
-                return false;
-            }
-        })
-        container.appendChild(li);
-    }
+    const daysArray = trip.createDaysHTML();
+    daysArray.forEach(day => container.append(day))
 };
 
 const createForm = function (days, ...elements) {
@@ -304,7 +393,6 @@ const createForm = function (days, ...elements) {
             const activityList = document.querySelector('#details-container');
             document.getElementById(`${day}`).className += ' active';
             activityList.innerHTML = '';
-            console.log(tripObj);
             if (day === duration) {
                 nextButton.innerText = 'Summary of trip!';
             }
@@ -314,20 +402,6 @@ const createForm = function (days, ...elements) {
     });
 
     document.getElementById('content-container').append(nextButton);
-
-    const daysArray = [];
-
-    for(let i=0; i <= days; i++) {
-        const day = {
-            day: i+1,
-            date: incrementDay(durationInDate[0], i),
-            activity:[]
-        };
-        daysArray.push(day);
-    }
-
-    tripObj.days.push(daysArray);
-
 };
 
 
@@ -404,7 +478,7 @@ const createActivityForm = function () {
     divForm.className = 'mb-3';
     activityForm.className = 'row g-3';
     startInput.type = 'time';
-    startInput.min = '00:00'
+    startInput.min = '00:00';
     startInput.max = '24:00';
     startInput.required = true;
     startInput.id = 'startInput';
@@ -464,18 +538,11 @@ const createActivityForm = function () {
 
         detailsContainer.append(divContainer);
 
-        const activity = {
-            description: activityInput.value,
-            startTime: startInput.value,
-            endTime: endInput.value
-        };
+        const activity = new Activity(startInput.value, endInput.value, activityInput.value);
 
-        tripObj.days[0][day-1].activity.push(activity);
-        tripObj.days[0][day-1].activity.sort(function (a,b) {
-            a = a.startTime.split(":").reduce((c,d) => c + d);
-            b = b.startTime.split(":").reduce((c, d) => c + d);
-            return a - b;
-        });
+        let ref = trip.queryDay(day);
+        ref[0].setActivity(activity);
+
         activityForm.reset();
     });
 
@@ -484,30 +551,7 @@ const createActivityForm = function () {
     document.querySelector('div#content-container').appendChild(divForm);
 };
 
-const countNumberOfDays = (startDate, endDate) =>
-    ((Date.parse(endDate.valueAsDate) - Date.parse(startDate.valueAsDate))/(1000 * 3600 * 24));
 
-const incrementDay = function (dateString, i=1) {
-    let date = new Date(dateString);
-    date.setDate(date.getDate() + i);
-    return date.toISOString().slice(0, 10);
-}
-
-const decrementDay = function (dateString, i=1) {
-    let date = new Date(dateString);
-    date.setDate(date.getDate() - i);
-    return date.toISOString().slice(0, 10);
-}
-
-const checkErrors = function (start, end) {
-    const days = countNumberOfDays(start, end);
-    if (days < 0) {
-        const messageBar = document.querySelector('#message-bar');
-        messageBar.innerHTML = '<span> Please enter a valid start and end date! </span>';
-    } else {
-        return days;
-    }
-}
 
 /*
 *   Proxy Server for Trip Planner
@@ -595,9 +639,9 @@ const createHotelCard = function (cardGroup, modal, dates, data) {
     title.className = 'card-title';
     title.innerText = data.name;
     text.className = 'card-text';
-    let address = data.location.formatted_address.split(",");
-    address = `<strong>${data.name}</strong><br>${address[0]}<br>${address[1]}, ${address[2]}`;
-    hotelAddress.innerHTML = address;
+    const address = data.location.formatted_address.split(",");
+    const splitAddress = `<strong>${data.name}</strong><br>${address[0]}<br>${address[1]}, ${address[2]}`;
+    hotelAddress.innerHTML = splitAddress;
     text.append(hotelAddress);
     cardHeader.innerText = data.name;
     cardHeader.className = 'card-header';
@@ -608,30 +652,9 @@ const createHotelCard = function (cardGroup, modal, dates, data) {
         e.preventDefault();
         modal.style.display = 'none';
         modal.innerHTML = '';
-        const hotel = {
-            name: data.name,
-            address: address,
-            checkInDate: dates[0],
-            checkOutDate: dates[1]
-        }
-
-        addHotel(address);
-
-        const startIndex = tripObj.days[0].findIndex((e) => e.date === dates[0]);
-        const endIndex = tripObj.days[0].findIndex((e) => e.date === dates[1]);
-        const checkInActivity = {
-            description: `Check into hotel (${data.name})`,
-            startTime: `15:00`,
-            endTime: `16:00`
-        };
-        const checkOutActivity = {
-            description: `Check out hotel (${data.name})`,
-            startTime: `11:00`,
-            endTime: `12:00`
-        };
-        tripObj.days[0][startIndex].activity.push(checkInActivity);
-        tripObj.days[0][endIndex].activity.push(checkOutActivity);
-        tripObj.hotels.push(hotel);
+        addHotel(splitAddress);
+        const hotel = new Hotel(data.name, dates[0], dates[1], address);
+        trip.setHotel(hotel);
     });
 
     cardBody.className = 'card-body';
@@ -719,16 +742,18 @@ const summaryDialog = function () {
     divContent.className = 'modal-content';
     divHeader.className = 'modal-header';
     modalTitle.className = 'modal-title';
-    modalTitle.innerText = `${tripObj.tripName.toUpperCase()}`;
+    modalTitle.innerText = `${trip.getName().toUpperCase()}`;
     divBody.className = 'modal-body';
     divBody.style.overflow = 'scroll';
 
-    const hotel = tripObj.hotels.length === 0? "None" : tripObj.hotels;
-    createListing(divBody,'Hotel', hotel.map(hotel => hotel.address));
+    const hotel = trip.getHotel();
+    createListing(divBody,'Hotel', trip.hotels.map(hotel => hotel.createHTMLAddress()));
 
+    const br = document.createElement('br');
+    divBody.append(br);
 
-    const activities = tripObj.days[0]
-    createListing(divBody, 'Activity', formatSingleActivity(activities))
+    const activities = trip.getDaysListing();
+    createListing(divBody, 'Activity', activities);
 
     buttonModalClose.className = 'btn-close';
     buttonModalClose.type = 'button';
@@ -759,28 +784,31 @@ const createListing = function (container, heading, listItems ) {
     [...listItems].forEach(function (item) {
         const li = document.createElement('li');
         li.className = 'list-group-item';
-        li.innerHTML = item;
-        ul.appendChild(li);
+        li.append(item);
+        ul.append(li);
     });
 
     container.append(h2, ul);
 };
 
-const formatSingleActivity = function (activity) {
-    const formattedResult = [];
-    Object.keys(activity).forEach(key => {
-        let a = activity[key];
-        let response = `<strong>Day ${a.day} - ${a.date}</strong><br>`;
-        if (a.activity.length === 0 ) {
-            response += `<p>No Activities</p>`
-        } else {
-            a.activity.forEach(act => response += `<u>${act.startTime} - ${act.endTime}</u><p>${act.description}</p>`)
-        }
-        formattedResult.push(response);
-    });
+const countNumberOfDays = (startDate, endDate) =>
+    ((Date.parse(endDate.valueAsDate) - Date.parse(startDate.valueAsDate))/(1000 * 3600 * 24));
 
-    console.log(formattedResult);
-    return formattedResult;
+const incrementDay = function (dateString, i=1) {
+    let date = new Date(dateString);
+    date.setDate(date.getDate() + i);
+    return date.toISOString().slice(0, 10);
+}
+
+const decrementDay = function (dateString, i=1) {
+    let date = new Date(dateString);
+    date.setDate(date.getDate() - i);
+    return date.toISOString().slice(0, 10);
+}
+
+const validateDates = function (start, end) {
+    const days = countNumberOfDays(start, end);
+    if (days < 0) return false
 }
 
 Array.prototype.removeIndex = function (index) {
@@ -796,6 +824,3 @@ Array.prototype.removeIndex = function (index) {
     a.map((ele) => this.push(ele));
     return this;
 };
-
-
-// @TODO: Fix Hotel Add Activity
