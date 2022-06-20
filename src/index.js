@@ -7,14 +7,15 @@ class Trip {
     createDaysHTML() {
         const daysArray = this.days.map(function (d) {
             const li = document.createElement('li');
-            li.id = d.day;
+            li.id = `${d.day}`;
             li.innerText = `${d.date} (Day ${d.day})`;
             li.className = 'list-group-item list-group-item-action';
-            if(d.day === 1) {
+            if(d.day == 1) {
                 li.classList.add('active');
             }
             li.addEventListener('click', function () {
                 if(li.classList.contains('active')) {
+                    day = parseInt(li.id);
                     loadDate(li.id);
                 } else {
                     return false;
@@ -39,11 +40,11 @@ class Trip {
         return array;
     }
     queryDate(date) {
-        const dateRef = this.days.filter(d => d.date === date);
+        const dateRef = this.days.filter(d => d.date == date);
         return dateRef;
     }
     queryDay(day) {
-        const dayRef = this.days.filter(d => d.day === day);
+        const dayRef = this.days.filter(d => d.day == day);
         return dayRef;
     }
     setName(name) {
@@ -60,7 +61,6 @@ class Trip {
     }
 }
 
-// Helper class for Trip
 class Day {
     constructor(day, date, activities = []) {
         this.day = day;
@@ -74,8 +74,8 @@ class Day {
     getActivity(){
 
     }
-    createActivityHTMLArray() {
-        const activityArray = this.activities.map((a) => a.createActivityHTML());
+    createActivityHTMLArray(ref) {
+        const activityArray = this.activities.map((a) => a.createActivityHTML(ref));
         return activityArray;
     }
     createActivityHTMLListingArray(){
@@ -103,28 +103,54 @@ class Day {
             return a - b;
         })
     }
-    deleteActivity() {
-
+    deleteActivity(activity) {
+        const newArray = this.activities.filter((a) => a != activity);
+        this.activities = newArray;
     }
 }
 
 class Activity {
     constructor(startTime, endTime, description) {
+        this.id = Math.ceil(Math.random() * 100000);
         this.startTime = startTime;
         this.endTime = endTime;
         this.description = description;
     }
-    createActivityHTML() {
+
+    createActivityHTML = (ref) => {
+        const dayRef = ref[0];
+        const activityRef = dayRef.activities.filter(a => a == this);
         const div = document.createElement('div');
         const h5 = document.createElement('h5');
         const u = document.createElement('u');
         const p = document.createElement('p');
+        const editButton = document.createElement('button');
+        const deleteButton = document.createElement('button');
+
+        div.id = this.id.toString();
+
+        editButton.type = 'button';
+        editButton.className = 'btn btn-success btn-sm rounded-0';
+        editButton.innerHTML = `<i class="fa fa-edit"></i>`;
+        editButton.addEventListener('click',() => {
+            modifyModal(this.description, this.startTime, this.endTime, this.id);
+        });
+
+        deleteButton.type = 'button';
+        deleteButton.className = 'btn btn-danger btn-sm rounded-0';
+        deleteButton.innerHTML = `<i class="fa fa-trash"></i>`;
+        deleteButton.addEventListener('click', () => {
+            const element = document.getElementById(this.id.toString());
+            element.remove();
+            dayRef.deleteActivity(this);
+        });
+
         u.innerText = `${this.startTime} - ${this.endTime}`;
-        h5.appendChild(u);
+        h5.append(u, editButton, deleteButton);
         p.innerText = this.description;
         div.append(h5, p);
         return div;
-    }
+    };
     createActivityListingHTML() {
         const div = document.createElement('div')
         const u = document.createElement('u');
@@ -160,38 +186,28 @@ class Hotel {
     }
 
     createHTMLAddress() {
-        const div = document.createElement('div');
+        const p = document.createElement('p');
         const strong = document.createElement('strong');
         strong.innerText = this.name;
-        div.appendChild(strong);
+        p.appendChild(strong);
 
         (function address1(address) {
             const span = document.createElement('span');
             const br = document.createElement('br');
             span.innerText = address[0];
-            div.append(br,span);
+            p.append(br,span);
         }) (this.address);
 
         (function addressCityAndState(address) {
             const span = document.createElement('span');
             const br = document.createElement('br');
             span.innerText = address[1] + "," + address[2];
-            div.append(br,span);
+            p.append(br,span);
         }) (this.address);
 
-        return div;
+        return p;
     }
 }
-// Constructor for tripObj
-const tripObj = {
-    tripName: "",
-    days: [],
-    hotels: []
-}
-
-const tripName = tripObj.tripName;
-const tripDays = tripObj.days;
-const tripHotels = tripObj.hotels;
 
 let day;
 let duration;
@@ -313,18 +329,13 @@ function init() {
         // Start day to input
         day = 1;
 
-        // Assign the tripObj a trip name.
+        // Assign the trip a trip name.
         trip.setName(tripNameInput.value);
         trip.createDays(startDate, endDate);
 
-        console.log(trip)
-
         titleP.innerHTML += `<p><h3>${trip.getName()}</h3></p>`;
         let ref = trip.queryDate(startDate.value);
-
-        console.log(ref[0]);
-
-
+        
         createNav(duration, durationInDate, tocContainer);
         createForm(numberOfDays, table);
     }
@@ -384,18 +395,17 @@ const createForm = function (days, ...elements) {
     // Modify Next Button
     const nextButton = document.createElement('button');
 
+    nextButton.id = 'next-button';
     nextButton.className = 'btn btn-dark btn-lg';
     nextButton.innerText = duration===1?'Summary of trip!':'Next Day';
     nextButton.addEventListener('click', function (e) {
         e.preventDefault();
         if (day < duration) {
             day += 1;
-            const activityList = document.querySelector('#details-container');
             document.getElementById(`${day}`).className += ' active';
-            activityList.innerHTML = '';
-            if (day === duration) {
-                nextButton.innerText = 'Summary of trip!';
-            }
+            loadDate(day);
+            if (day === duration) nextButton.innerText = 'Summary of trip!'
+            else nextButton.innerText = 'Next Day'
         } else {
             summaryDialog()
         }
@@ -500,48 +510,10 @@ const createActivityForm = function () {
     activityForm.addEventListener('submit', function (e) {
         e.preventDefault();
         const detailsContainer = document.querySelector('div#details-container');
-        const divContainer = document.createElement('div');
-        const h5 = document.createElement('h5');
-        const p = document.createElement('p');
-        const editButton = document.createElement('button');
-        const deleteButton = document.createElement('button');
-
-        h5.innerHTML = `<u>${startInput.value} - ${endInput.value}</u>`;
-        p.innerText = `${activityInput.value}`;
-
-        /*
-        *  @TODO: Create an edit button with function to edit it's corresponding entry in tripObj
-        */
-        editButton.type = 'button';
-        editButton.className = 'btn btn-success btn-sm rounded-0';
-        editButton.innerHTML = `<i class="fa fa-edit"></i>`;
-        editButton.addEventListener('click', function (e) {
-            e.preventDefault();
-            const index = tripObj.days[0][day-1].activity.indexOf(activity);
-            const enableEdit = document.querySelector(`div#${index}`);
-            enableEdit.setAttribute('contentEditable', true);
-
-        })
-
-        deleteButton.type = 'button';
-        deleteButton.className = 'btn btn-danger btn-sm rounded-0';
-        deleteButton.innerHTML = `<i class="fa fa-trash"></i>`;
-        deleteButton.addEventListener('click', function (e) {
-            e.preventDefault();
-            const index = tripObj.days[0][day-1].activity.indexOf(activity);
-            // div > h5 > button
-            this.parentElement.parentElement.remove();
-            tripObj.days[0][day-1].activity.removeIndex(index);
-        });
-        h5.append(editButton, deleteButton);
-        divContainer.append(h5, p);
-
-        detailsContainer.append(divContainer);
-
         const activity = new Activity(startInput.value, endInput.value, activityInput.value);
-
-        let ref = trip.queryDay(day);
+        const ref = trip.queryDay(day);
         ref[0].setActivity(activity);
+        detailsContainer.append(activity.createActivityHTML(ref));
 
         activityForm.reset();
     });
@@ -586,7 +558,7 @@ const queryHotels = async function (query) {
 }
 
 const createHotelModal = function (data, ...params) {
-    const divModal = document.querySelector('#resultsModal');
+    const divModal = document.getElementById('content-modal');
     const buttonModalClose = document.createElement('button');
     const modalTitle = document.createElement('h5');
     const divDialog = document.createElement('div');
@@ -650,11 +622,12 @@ const createHotelCard = function (cardGroup, modal, dates, data) {
     addButton.innerText = 'Add Hotel';
     addButton.addEventListener('click', function (e) {
         e.preventDefault();
+        const dayRef = trip.queryDay(day);
         modal.style.display = 'none';
         modal.innerHTML = '';
-        addHotel(splitAddress);
         const hotel = new Hotel(data.name, dates[0], dates[1], address);
         trip.setHotel(hotel);
+        loadDate(day);
     });
 
     cardBody.className = 'card-body';
@@ -666,65 +639,34 @@ const createHotelCard = function (cardGroup, modal, dates, data) {
     cardGroup.append(div);
 }
 
-const addHotel = function (address) {
-    const detailsContainer = document.querySelector('div#details-container');
-    const h5 = document.createElement('h5');
-    const p = document.createElement('p');
-
-    h5.innerHTML = '<u>Hotel Information</u>';
-    p.innerHTML = address;
-    detailsContainer.append(h5, p);
-};
+// const addHotel = function (address) {
+//     const detailsContainer = document.querySelector('div#details-container');
+//     const h5 = document.createElement('h5');
+//     const p = document.createElement('p');
+//     h5.innerHTML = '<u>Hotel Information</u>';
+//     p.innerHTML = address;
+//     loadDate(day);
+//     detailsContainer.prepend(h5, p);
+// };
 
 const loadDate = function (date) {
     const detailsContainer = document.querySelector('div#details-container');
     detailsContainer.innerHTML = "";
-    tripObj.days[0][date-1].activity.forEach(function (e, index) {
-        const activityDiv = document.createElement('div');
-        const h5 = document.createElement('h5');
-        const p = document.createElement('p');
-        const editButton = document.createElement('button');
-        const deleteButton = document.createElement('button');
-
-        activityDiv.id = `${index}`;
-        h5.innerHTML = `<u>${e.startTime} - ${e.endTime}</u>`;
-        p.innerText = `${e.description}`;
-
-        editButton.type = 'button';
-        editButton.className = 'btn btn-success btn-sm rounded-0';
-        editButton.innerHTML = `<i class="fa fa-edit"></i>`;
-        editButton.addEventListener('click', function (e) {
-            e.preventDefault();
-        });
-
-        deleteButton.type = 'button';
-        deleteButton.className = 'btn btn-danger btn-sm rounded-0';
-        deleteButton.innerHTML = `<i class="fa fa-trash"></i>`;
-        deleteButton.addEventListener('click', function (e) {
-            e.preventDefault();
-            this.parentElement.parentElement.remove();
-            tripObj.days[0][date-1].activity.removeIndex(index);
-        });
-        h5.append(editButton, deleteButton);
-
-        activityDiv.append(h5, p);
-
-        /*
-        *  @TODO: Create an edit button with function to edit it's corresponding entry in tripObj
-        */
-        detailsContainer.append(activityDiv);
-    });
-
-
-
-    /*
-     *  @TODO: Create an edit button with function to edit it's corresponding entry in tripObj
-     */
+    const hotels = trip.hotels;
+    const dayRef = trip.queryDay(date);
+    dayRef[0].createActivityHTMLArray(dayRef).forEach((a) => detailsContainer.append(a));
+    const nextButton = document.getElementById('next-button');
+    if (day < duration) nextButton.innerText = 'Next Day'
+    else nextButton.innerText = 'Summary of trip!';
+    trip.hotels.forEach((h) => detailsContainer.prepend(h.createHTMLAddress()));
+    const h5 = document.createElement('h5');
+    h5.innerHTML = '<u>Hotel Information</u>';
+    detailsContainer.prepend(h5);
 };
 
 
 const summaryDialog = function () {
-    const divModal = document.createElement('div');
+    const divModal = document.getElementById('content-modal');
     const divHeader = document.createElement('div');
     const divBody = document.createElement('div');
     const divDialog = document.createElement('div');
@@ -770,8 +712,6 @@ const summaryDialog = function () {
 
     divModal.classList.add("show");
     divModal.style.display = 'block';
-
-    document.body.append(divModal);
 };
 
 const createListing = function (container, heading, listItems ) {
@@ -789,6 +729,119 @@ const createListing = function (container, heading, listItems ) {
     });
 
     container.append(h2, ul);
+};
+
+ function modifyModal(description, startTime, endTime, id) {
+    const divModal = document.getElementById('content-modal');
+    const divHeader = document.createElement('div');
+    const divBody = document.createElement('div');
+    const divFooter = document.createElement('div');
+    const divDialog = document.createElement('div');
+    const divContent = document.createElement('div');
+    const buttonCancel = document.createElement('button');
+    const buttonSubmit = document.createElement('button');
+    const modalTitle = document.createElement('h5');
+
+    const form = document.createElement('form');
+    const editDescription = document.createElement('input');
+    const editDescriptionLabel = document.createElement('label');
+    const editStartTime = document.createElement('input');
+    const editStartTimeLabel = document.createElement('label');
+    const editEndTime = document.createElement('input');
+    const editEndTimeLabel = document.createElement('label');
+
+    divModal.innerHTML = "";
+
+    form.className = 'form-floating';
+
+    divModal.className = 'modal fade';
+    divModal.setAttribute('tabIndex', '-1');
+    divModal.setAttribute('role', 'dialog');
+    divModal.ariaHidden = 'true';
+    divModal.setAttribute('aria-labelledby', 'summaryDialogLabel');
+
+    divDialog.className = 'modal-dialog modal-md';
+    divContent.className = 'modal-content';
+    divHeader.className = 'modal-header';
+    modalTitle.className = 'modal-title';
+    modalTitle.innerText = 'Modify Activity';
+    divBody.className = 'modal-body';
+    divBody.style.overflow = 'scroll';
+
+    editDescription.className = 'form-control';
+    editDescription.value = `${description}`;
+    editDescription.id = 'description';
+    editDescription.type = 'text';
+    editDescription.required = true;
+    editDescriptionLabel.setAttribute('for', 'description');
+    editDescriptionLabel.innerText = 'Description';
+    editStartTime.className = 'form-control';
+    editStartTime.value = `${startTime}`;
+    editStartTime.type = 'time';
+    editStartTime.id = 'start-time';
+    editStartTime.min = '00:00';
+    editStartTime.max = '24:00';
+    editStartTime.required = true;
+    editStartTimeLabel.setAttribute('for', 'start-time');
+    editStartTimeLabel.innerText = 'Start Time';
+    editEndTime.className = 'form-control';
+    editEndTime.value = `${endTime}`;
+    editEndTime.id = 'end-time';
+    editEndTime.type = 'time';
+    editEndTime.min = '00:00';
+    editEndTime.max = '24:00';
+    editEndTime.required = true;
+    editEndTimeLabel.setAttribute('for', 'end-time');
+    editEndTimeLabel.innerText = 'End Time';
+
+    [[editDescription, editDescriptionLabel], [editStartTime, editStartTimeLabel], [editEndTime, editEndTimeLabel]]
+        .map(function(e) {
+            const div = document.createElement('div');
+            div.className = 'form-floating';
+            [...e].forEach((a) => div.append(a));
+            divBody.append(div);
+    })
+
+    divFooter.className = 'modal-footer';
+    buttonCancel.innerText = 'Cancel';
+    buttonCancel.className = 'btn btn-danger';
+    buttonCancel.type = 'button';
+    buttonCancel.addEventListener('click', function (e) {
+        e.preventDefault();
+        divModal.style.display = 'none';
+        divModal.innerHTML = '';
+    });
+
+    buttonSubmit.innerText = 'Submit Changes';
+    buttonSubmit.type = 'submit';
+    buttonSubmit.className = 'btn btn-success';
+
+    divHeader.append(modalTitle);
+    divFooter.append(buttonCancel, buttonSubmit);
+    divContent.append(divHeader, divBody, divFooter);
+    form.append(divContent);
+
+    form.addEventListener('submit', function (e) {
+        // Prevent Form Submission
+        e.preventDefault();
+        const dayRef = trip.queryDay(day);
+        const activityRef = trip.days[day-1].activities.filter((a) => a.id == id)
+        activityRef[0].editActivity(editStartTime.value, editEndTime.value, editDescription.value);
+
+        const oldListing = document.getElementById(id);
+        oldListing.remove();
+
+        const divContainer = document.getElementById('details-container');
+        divContainer.append(activityRef[0].createActivityHTML(dayRef));
+        divModal.style.display = 'none';
+        divModal.innerHTML = '';
+    });
+
+    divDialog.appendChild(form);
+    divModal.appendChild(divDialog);
+
+    divModal.classList.add("show");
+    divModal.style.display = 'block';
 };
 
 const countNumberOfDays = (startDate, endDate) =>
