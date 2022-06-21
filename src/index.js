@@ -71,9 +71,6 @@ class Day {
         this.activities.push(Activity);
         this.sortActivities();
     }
-    getActivity(){
-
-    }
     createActivityHTMLArray(ref) {
         const activityArray = this.activities.map((a) => a.createActivityHTML(ref));
         return activityArray;
@@ -638,16 +635,6 @@ const createHotelCard = function (cardGroup, modal, dates, data) {
     div.append(card);
     cardGroup.append(div);
 }
-
-// const addHotel = function (address) {
-//     const detailsContainer = document.querySelector('div#details-container');
-//     const h5 = document.createElement('h5');
-//     const p = document.createElement('p');
-//     h5.innerHTML = '<u>Hotel Information</u>';
-//     p.innerHTML = address;
-//     loadDate(day);
-//     detailsContainer.prepend(h5, p);
-// };
 
 const loadDate = function (date) {
     const detailsContainer = document.querySelector('div#details-container');
