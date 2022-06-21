@@ -525,33 +525,33 @@ const createActivityForm = function () {
 /*
 *   Proxy Server for Trip Planner
 */
-// const proxyServerURL = `https://proxyservertripplanner.onrender.com/hotels/`;
-//
-// const configuration = {
-//     mode: "cors",
-//     method: "GET",
-//     headers: {
-//         Accept: "application/json",
-//         "Access-Control-Allow-Origin": "*"
-//     }
-// }
+const proxyServerURL = `https://proxyservertripplanner.onrender.com/hotels/`;
+
+const configuration = {
+    mode: "cors",
+    method: "GET",
+    headers: {
+        Accept: "application/json",
+        "Access-Control-Allow-Origin": "*"
+    }
+}
 
 const queryHotels = async function (query) {
-    const jsonURL = document.location.href == "https://jackieyedev.github.io/TripPlanner/" ? "https://jackieyedev.github.io/TripPlanner/test/res.json" : "../test/res.json"
-    let jsonData =  await fetch(jsonURL)
-        .then(response => response.json())
-        .then(data => data)
-        .catch(err => console.error(err));
+    try {
+        let jsonData = await fetch(proxyServerURL+query, configuration)
+            .then(response => response.json())
+            .then(data => data)
+            .catch(err => console.error(err));
+        createHotelModal(jsonData.results.slice(0, 6), durationInDate);
+    } catch (e) {
+        const jsonURL = document.location.href == "https://jackieyedev.github.io/TripPlanner/" ? "https://jackieyedev.github.io/TripPlanner/test/res.json" : "../test/res.json"
+        let jsonData =  await fetch(jsonURL)
+            .then(response => response.json())
+            .then(data => data)
+            .catch(err => console.error(err));
 
-    createHotelModal(jsonData.results.slice(0, 6), durationInDate);
-    //
-    // let jsonData = await fetch(proxyServerURL+query, configuration)
-    //     .then(response => response.json())
-    //     .then(data => data)
-    //     .catch(err => console.error(err));
-    //
-    // console.log(jsonData.results);
-    // createModal(jsonData.results);
+        createHotelModal(jsonData.results.slice(0, 6), durationInDate);
+    }
 }
 
 const createHotelModal = function (data, ...params) {
