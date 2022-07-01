@@ -5,7 +5,7 @@ class Trip {
         this.hotels = hotels || [];
     }
     createDaysHTML() {
-        const daysArray = this.days.map(function (d) {
+        const daysArray = this.days.map((d) => {
             const li = document.createElement('li');
             li.id = `${d.day}`;
             li.innerText = `${d.date} (Day ${d.day})`;
@@ -13,7 +13,7 @@ class Trip {
             if(d.day == 1) {
                 li.classList.add('active');
             }
-            li.addEventListener('click', function () {
+            li.addEventListener('click', () => {
                 if(li.classList.contains('active')) {
                     day = parseInt(li.id);
                     loadDate(li.id);
@@ -81,7 +81,7 @@ class Day {
         strong.innerText = `Day ${this.day} - ${this.date}`;
         div.append(strong);
         if (this.activities.length != 0) {
-            this.activities.map(function (a)  {
+            this.activities.map((a) => {
                 const array = a.createActivityListingHTML();
                 div.append(array);
             });
@@ -94,7 +94,7 @@ class Day {
         return div;
     }
     sortActivities() {
-        this.activities.sort(function (a,b) {
+        this.activities.sort((a,b) => {
             a = a.startTime.split(":").reduce((c, d) => c + d);
             b = b.startTime.split(":").reduce((c, d) => c + d);
             return a - b;
@@ -287,7 +287,7 @@ function init() {
     formContainer.appendChild(form);
 
     // Set Attributes to Next Button
-    const beginAdventure = function (e) {
+    const beginAdventure = (e) => {
         e.preventDefault();
         // Prevent Empty Input
 
@@ -332,7 +332,7 @@ function init() {
 
         titleP.innerHTML += `<p><h3>${trip.getName()}</h3></p>`;
         let ref = trip.queryDate(startDate.value);
-        
+
         createNav(duration, durationInDate, tocContainer);
         createForm(numberOfDays, table);
     }
@@ -340,9 +340,9 @@ function init() {
     nextButton.addEventListener('click', beginAdventure);
 }
 
-const generateTableRows = function (tbody, ...elements) {
+const generateTableRows = (tbody, ...elements) => {
     const tr = document.createElement('tr');
-    elements.map(function (e) {
+    elements.map((e) => {
         const td = document.createElement('td');
         td.appendChild(e);
         tr.appendChild(td);
@@ -350,9 +350,9 @@ const generateTableRows = function (tbody, ...elements) {
     tbody.appendChild(tr);
 };
 
-const generateTableHeaders = function (tbody, ...elements) {
+const generateTableHeaders = (tbody, ...elements) => {
     const tr = document.createElement('tr');
-    elements.map(function (e) {
+    elements.map((e) => {
         const th = document.createElement('th');
         th.appendChild(e);
         tr.appendChild(th);
@@ -360,7 +360,7 @@ const generateTableHeaders = function (tbody, ...elements) {
     tbody.appendChild(tr);
 };
 
-const generateLabels = function (id, text) {
+const generateLabels = (id, text) => {
     const label = document.createElement('label');
     label.setAttribute('for', id);
     label.innerText = text;
@@ -371,7 +371,7 @@ const generateLabels = function (id, text) {
 *  RENDER FORM AFTER BUTTON CLICKED
 */
 
-const createNav = function (days, duration, container) {
+const createNav = (days, duration, container) => {
     if (days === false) return false;
     const messageBar = document.querySelector('#message-bar');
     messageBar.innerHTML = "";
@@ -379,7 +379,7 @@ const createNav = function (days, duration, container) {
     daysArray.forEach(day => container.append(day))
 };
 
-const createForm = function (days, ...elements) {
+const createForm = (days, ...elements) => {
     // Remove unnecessary elements
     [...elements].forEach((e) => e.remove());
 
@@ -395,7 +395,7 @@ const createForm = function (days, ...elements) {
     nextButton.id = 'next-button';
     nextButton.className = 'btn btn-dark btn-lg';
     nextButton.innerText = duration===1?'Summary of trip!':'Next Day';
-    nextButton.addEventListener('click', function (e) {
+    nextButton.addEventListener('click', (e) => {
         e.preventDefault();
         if (day < duration) {
             day += 1;
@@ -412,7 +412,7 @@ const createForm = function (days, ...elements) {
 };
 
 
-const createHotelForm = function () {
+const createHotelForm = () => {
     const divForm = document.createElement('div');
     const hotelForm = document.createElement('form');
     const hotelInput = document.createElement('input');
@@ -453,7 +453,7 @@ const createHotelForm = function () {
     table.append(tbody);
     hotelForm.append(table);
 
-    hotelForm.addEventListener('submit', function (e) {
+    hotelForm.addEventListener('submit', (e) => {
         e.preventDefault();
         queryHotels(hotelInput.value);
         hotelForm.reset();
@@ -464,7 +464,7 @@ const createHotelForm = function () {
     document.querySelector('div#content-container').appendChild(divForm);
 };
 
-const createActivityForm = function () {
+const createActivityForm = () => {
     const divForm = document.createElement('div');
     const activityForm = document.createElement('form');
     const activityInput = document.createElement('input');
@@ -504,7 +504,7 @@ const createActivityForm = function () {
     table.append(tbody);
     activityForm.append(table);
 
-    activityForm.addEventListener('submit', function (e) {
+    activityForm.addEventListener('submit', (e) => {
         e.preventDefault();
         const detailsContainer = document.querySelector('div#details-container');
         const activity = new Activity(startInput.value, endInput.value, activityInput.value);
@@ -536,7 +536,7 @@ const configuration = {
     }
 }
 
-const queryHotels = async function (query) {
+const queryHotels = async (query) => {
     try {
         let jsonData = await fetch(proxyServerURL+query, configuration)
             .then(response => response.json())
@@ -554,7 +554,7 @@ const queryHotels = async function (query) {
     }
 }
 
-const createHotelModal = function (data, ...params) {
+const createHotelModal = (data, ...params) => {
     const divModal = document.getElementById('content-modal');
     const buttonModalClose = document.createElement('button');
     const modalTitle = document.createElement('h5');
@@ -570,7 +570,7 @@ const createHotelModal = function (data, ...params) {
     divModal.setAttribute('aria-labelledby', 'resultsModalLabel');
     buttonModalClose.className = 'btn-close';
     buttonModalClose.type = 'button';
-    buttonModalClose.addEventListener('click', function (e) {
+    buttonModalClose.addEventListener('click', (e) => {
         e.preventDefault();
         divModal.style.display = 'none';
         divModal.innerHTML = '';
@@ -593,7 +593,7 @@ const createHotelModal = function (data, ...params) {
     divModal.style.display = 'block';
 }
 
-const createHotelCard = function (cardGroup, modal, dates, data) {
+const createHotelCard = (cardGroup, modal, dates, data) => {
     const card = document.createElement('div');
     const cardHeader = document.createElement('div');
     const title = document.createElement('h5');
@@ -617,7 +617,7 @@ const createHotelCard = function (cardGroup, modal, dates, data) {
 
     addButton.className = 'btn btn-outline-primary mb-3'
     addButton.innerText = 'Add Hotel';
-    addButton.addEventListener('click', function (e) {
+    addButton.addEventListener('click', (e) => {
         e.preventDefault();
         const dayRef = trip.queryDay(day);
         modal.style.display = 'none';
@@ -636,7 +636,7 @@ const createHotelCard = function (cardGroup, modal, dates, data) {
     cardGroup.append(div);
 }
 
-const loadDate = function (date) {
+const loadDate = (date) => {
     const detailsContainer = document.querySelector('div#details-container');
     detailsContainer.innerHTML = "";
     const hotels = trip.hotels;
@@ -652,7 +652,7 @@ const loadDate = function (date) {
 };
 
 
-const summaryDialog = function () {
+const summaryDialog = () => {
     const divModal = document.getElementById('content-modal');
     const divHeader = document.createElement('div');
     const divBody = document.createElement('div');
@@ -686,7 +686,7 @@ const summaryDialog = function () {
 
     buttonModalClose.className = 'btn-close';
     buttonModalClose.type = 'button';
-    buttonModalClose.addEventListener('click', function (e) {
+    buttonModalClose.addEventListener('click', (e) => {
         e.preventDefault();
         divModal.style.display = 'none';
         divModal.innerHTML = '';
@@ -701,14 +701,14 @@ const summaryDialog = function () {
     divModal.style.display = 'block';
 };
 
-const createListing = function (container, heading, listItems ) {
+const createListing = (container, heading, listItems ) => {
     const h2 = document.createElement('h2');
     const ul = document.createElement('ul');
 
     h2.innerText = heading;
     ul.className = 'list-group';
 
-    [...listItems].forEach(function (item) {
+    [...listItems].forEach((item) => {
         const li = document.createElement('li');
         li.className = 'list-group-item';
         li.append(item);
@@ -793,7 +793,7 @@ const createListing = function (container, heading, listItems ) {
     buttonCancel.innerText = 'Cancel';
     buttonCancel.className = 'btn btn-danger';
     buttonCancel.type = 'button';
-    buttonCancel.addEventListener('click', function (e) {
+    buttonCancel.addEventListener('click', (e) => {
         e.preventDefault();
         divModal.style.display = 'none';
         divModal.innerHTML = '';
@@ -808,7 +808,7 @@ const createListing = function (container, heading, listItems ) {
     divContent.append(divHeader, divBody, divFooter);
     form.append(divContent);
 
-    form.addEventListener('submit', function (e) {
+    form.addEventListener('submit', (e) => {
         // Prevent Form Submission
         e.preventDefault();
         const dayRef = trip.queryDay(day);
@@ -834,33 +834,19 @@ const createListing = function (container, heading, listItems ) {
 const countNumberOfDays = (startDate, endDate) =>
     ((Date.parse(endDate.valueAsDate) - Date.parse(startDate.valueAsDate))/(1000 * 3600 * 24));
 
-const incrementDay = function (dateString, i=1) {
+const incrementDay = (dateString, i=1) => {
     let date = new Date(dateString);
     date.setDate(date.getDate() + i);
     return date.toISOString().slice(0, 10);
 }
 
-const decrementDay = function (dateString, i=1) {
+const decrementDay = (dateString, i=1) => {
     let date = new Date(dateString);
     date.setDate(date.getDate() - i);
     return date.toISOString().slice(0, 10);
 }
 
-const validateDates = function (start, end) {
+const validateDates = (start, end) => {
     const days = countNumberOfDays(start, end);
     if (days < 0) return false
 }
-
-Array.prototype.removeIndex = function (index) {
-    const a = [];
-    for (let i = 0; i < this.length; i++) {
-        if(i !== index) {
-            a.push(this[i]);
-        }
-    }
-    while(this.length > 0) {
-        this.pop();
-    };
-    a.map((ele) => this.push(ele));
-    return this;
-};
