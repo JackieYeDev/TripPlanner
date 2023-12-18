@@ -2,10 +2,6 @@
 import Landing from "./landing.js";
 import Itinerary from "./itinerary.js";
 
-let day;
-let duration;
-let durationInDate;
-
 // Declare global container
 let mainContainer;
 
@@ -43,3 +39,19 @@ function init() {
 
     // @TODO: Add error handling page / feedback
 }
+
+// <div className="modal-dialog" role="document">
+//     <div className="modal-content">
+//         <div className="modal-header">
+//             <h4 className="modal-title">Modal Title</h4>
+//             <button className="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
+//         </div>
+//         <div className="modal-body">
+//             <p>The content of your modal.</p>
+//         </div>
+//         <div className="modal-footer">
+//             <button className="btn btn-light" type="button" data-bs-dismiss="modal">Close</button>
+//             <button className="btn btn-primary" type="button">Save</button>
+//         </div>
+//     </div>
+// </div>
