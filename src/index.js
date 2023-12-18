@@ -1,10 +1,5 @@
-import TOKEN from "./config.js";
-import Trip from "./trip.js";
-import Hotel from "./hotel.js";
-import Day from "./day.js";
-import Activity from "./activity.js";
+// import TOKEN from "./config.js";
 import Landing from "./landing.js";
-import App from "./itinerary.js";
 import Itinerary from "./itinerary.js";
 
 let day;
@@ -16,8 +11,6 @@ let mainContainer;
 
 // Data
 let tripData = {};
-
-const trip = new Trip();
 
 document.addEventListener("DOMContentLoaded", init);
 
