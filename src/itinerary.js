@@ -1,3 +1,5 @@
+import HotelForm from "./hotelForm.js";
+
 class Itinerary {
     constructor(container, tripData) {
         this.container = container;
@@ -14,7 +16,6 @@ class Itinerary {
         const containerRightColLayout = document.createElement('div');
 
         // Assign class name(s) to HTML Element(s)
-        tripName.className = ''
         bodyContainer.className = 'container-fluid text-start';
         containerRowLayout.className = 'row d-flex justify-content-center';
         containerLeftColLayout.className = 'col-lg-5';
@@ -30,6 +31,10 @@ class Itinerary {
         tripName.textContent = this.tripData.tripNameInput;
 
         // Assign id to HTML Element(s)
+
+        // Hotel Form
+        const hotelForm = new HotelForm(containerLeftColLayout);
+        hotelForm.render();
 
         // Append Elements to Respective Containers
         containerRowLayout.append(containerLeftColLayout, containerCenterColLayout, containerRightColLayout);
