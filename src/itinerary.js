@@ -24,7 +24,7 @@ class Itinerary {
 
 
         // Assign style(s) to HTML Element(s)
-        tripName.style = 'text-align: center;';
+        tripName.style = 'text-align: center; margin-bottom: 12px;';
 
 
         // Assign properties to HTML ELement(s)
