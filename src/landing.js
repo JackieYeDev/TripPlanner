@@ -65,6 +65,9 @@ class Landing {
         //     if(this.formValidation() === true)
         //         return this.submit();
         // })
+        tripForm.addEventListener('keydown', (e) => {
+            if(e.key === 'Enter') e.preventDefault();
+        })
 
         // Append Elements to Respective Containers
         tripNameContainer.append(tripNameLabel, tripNameInput);
@@ -120,7 +123,7 @@ class Landing {
         const tripNameInput = document.querySelector('input#tripNameInput').value;
         const startDateInput = document.querySelector('input#startDateInput');
         const endDateInput = document.querySelector('input#endDateInput');
-        const json = {
+        const tripData = {
             tripNameInput: tripNameInput,
             startDateInput: startDateInput.value,
             endDateInput: endDateInput.value,
@@ -128,7 +131,7 @@ class Landing {
         }
         // For Debugging
         // console.log(json);
-        return json;
+        return tripData;
     }
 
     destroy() {
