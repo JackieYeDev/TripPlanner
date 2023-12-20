@@ -1,27 +1,29 @@
+import Modal from "./modal.js";
+import TOKEN from "./config.js";
 class HotelForm {
 
     constructor(container) {
         this.container = container;
     }
 
-
     render() {
+        // Create HTML Element(s)
         const card = document.createElement('div');
         const cardBody = document.createElement('div');
         const cardTitle = document.createElement('h4');
-        const form = document.createElement('form');
+        const hotelForm = document.createElement('form');
         const locationLabel = document.createElement('label');
         const locationInput = document.createElement('input');
-        const startDateLabel = document.createElement('label');
-        const startDateInput = document.createElement('input');
-        const endDateLabel = document.createElement('label');
-        const endDateInput = document.createElement('input');
+        const checkInDateLabel = document.createElement('label');
+        const checkInDateInput = document.createElement('input');
+        const checkOutDateLabel = document.createElement('label');
+        const checkOutDateInput = document.createElement('input');
         const searchButton = document.createElement('button');
 
         // Assign style(s) to HTML Element(s)
         cardBody.style = 'margin-bottom: 10;';
-        startDateLabel.style = 'margin-top: 12px;';
-        endDateLabel.style = 'padding-top: 0px;margin-top: 12px;';
+        checkInDateLabel.style = 'margin-top: 12px;';
+        checkOutDateLabel.style = 'padding-top: 0px;margin-top: 12px;';
         searchButton.style = 'margin-top: 12px;';
 
         // Assign class name(s) to HTML Element(s)
@@ -30,34 +32,71 @@ class HotelForm {
         cardTitle.className = 'card-title';
         locationLabel.className = 'form-label';
         locationInput.className = 'form-control';
-        startDateLabel.className = 'form-label';
-        startDateInput.className = 'form-control';
-        endDateLabel.className = 'form-label';
-        endDateInput.className = 'form-control';
+        checkInDateLabel.className = 'form-label';
+        checkInDateInput.className = 'form-control';
+        checkOutDateLabel.className = 'form-label';
+        checkOutDateInput.className = 'form-control';
         searchButton.className = 'btn btn-primary d-block w-100';
 
         // Assign id to Form Element(s)
         locationInput.id = 'locationInput';
-        startDateInput.id = 'startDateInput';
-        endDateInput.id = 'endDateInput';
+        checkInDateInput.id = 'checkInDateInput';
+        checkOutDateInput.id = 'checkOutDateInput';
 
         // Assign properties to HTML ELement(s)
         cardTitle.innerText = 'Hotel Search by Location';
         locationLabel.innerText = 'Location:'
         locationInput.type = 'text';
         locationInput.placeholder = 'Please input a location';
-        startDateLabel.innerText = 'Start Date:';
-        startDateInput.type = 'date';
-        endDateLabel.innerText = 'End Date:';
-        endDateInput.type = 'date';
+        checkInDateLabel.innerText = 'Check In Date:';
+        checkInDateInput.type = 'date';
+        checkOutDateLabel.innerText = 'Check Out Date:';
+        checkOutDateInput.type = 'date';
         searchButton.type = 'button';
         searchButton.textContent = 'Search';
 
-        form.append(locationLabel, locationInput, startDateLabel, startDateInput, endDateLabel, endDateInput, searchButton);
-        cardBody.append(cardTitle, form);
+        // Add event listener(s) to HTML Element(s)
+        searchButton.addEventListener('click', (e) => {
+            this.queryHotels(locationInput.value)
+                .then((results) => {
+                    const modal = new Modal(results);
+                    modal.render("Hotel Result Search");
+                })
+        })
+
+        hotelForm.addEventListener('keydown', (e) => {
+            if(e.key === 'Enter') e.preventDefault();
+        })
+
+
+        // Append Elements to Respective Containers
+        hotelForm.append(locationLabel, locationInput, checkInDateLabel, checkInDateInput, checkOutDateLabel, checkOutDateInput, searchButton);
+        cardBody.append(cardTitle, hotelForm);
         card.append(cardBody);
 
         this.container.append(card);
+    }
+
+    async queryHotels(query){
+        const configuration = {
+            mode: "cors",
+            method: "GET",
+            headers: {
+                Accept: "application/json",
+                "Access-Control-Allow-Origin": "*",
+                "Authorization": TOKEN,
+            }
+        }
+        try {
+            const jsonData = await fetch("https://api.foursquare.com/v3/places/search?query=hotel&limit=5&near="+query, configuration)
+                .then(response => response.json())
+                .then(data => data)
+                .catch(err => console.error(err));
+            return jsonData.results.slice(0, 6);
+        } catch (e) {
+            console.error(e);
+            return [];
+        }
     }
 }
 
