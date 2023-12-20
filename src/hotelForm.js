@@ -1,5 +1,4 @@
 import Modal from "./modal.js";
-import TOKEN from "./config.js";
 class HotelForm {
 
     constructor(container) {
@@ -84,11 +83,10 @@ class HotelForm {
             headers: {
                 Accept: "application/json",
                 "Access-Control-Allow-Origin": "*",
-                "Authorization": TOKEN,
             }
         }
         try {
-            const jsonData = await fetch("https://api.foursquare.com/v3/places/search?query=hotel&limit=5&near="+query, configuration)
+            const jsonData = await fetch("https://proxyservertripplanner.onrender.com/hotels/"+query, configuration)
                 .then(response => response.json())
                 .then(data => data)
                 .catch(err => console.error(err));
