@@ -1,4 +1,5 @@
 import HotelForm from "./hotelForm.js";
+import ActivityForm from "./activityForm.js";
 
 class Itinerary {
     constructor(container, tripData) {
@@ -14,6 +15,7 @@ class Itinerary {
         const containerLeftColLayout = document.createElement('div');
         const containerCenterColLayout = document.createElement('div');
         const containerRightColLayout = document.createElement('div');
+        const leftCardGroup = document.createElement('div');
 
         // Assign class name(s) to HTML Element(s)
         bodyContainer.className = 'container-fluid text-start';
@@ -21,10 +23,12 @@ class Itinerary {
         containerLeftColLayout.className = 'col-lg-5';
         containerCenterColLayout.className = 'col-lg-2';
         containerRightColLayout.className = 'col-auto col-md-8 col-lg-5 col-xl-5 col-xxl-4';
+        leftCardGroup.className = 'card-group';
 
 
         // Assign style(s) to HTML Element(s)
         tripName.style = 'text-align: center; margin-bottom: 12px;';
+        leftCardGroup.style = 'display: grid; grid-gap: 8px;';
 
 
         // Assign properties to HTML ELement(s)
@@ -33,10 +37,15 @@ class Itinerary {
         // Assign id to HTML Element(s)
 
         // Hotel Form
-        const hotelForm = new HotelForm(containerLeftColLayout);
+        const hotelForm = new HotelForm(leftCardGroup);
         hotelForm.render();
 
+        // Activity Form
+        const activityForm = new ActivityForm(leftCardGroup);
+        activityForm.render();
+
         // Append Elements to Respective Containers
+        containerLeftColLayout.append(leftCardGroup);
         containerRowLayout.append(containerLeftColLayout, containerCenterColLayout, containerRightColLayout);
         bodyContainer.append(containerRowLayout);
         this.container.append(tripName, bodyContainer);
