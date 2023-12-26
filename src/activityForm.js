@@ -73,6 +73,15 @@ class ActivityForm {
             if(e.key === 'Enter') e.preventDefault();
         })
 
+        addButton.addEventListener('click', () => {
+            this.tripData.addActivity(dateSelection.value, {
+                startTime: startTimeInput.value,
+                endTime: endTimeInput.value,
+                description: activityInput.value,
+                sortValue: startTimeInput.valueAsNumber,
+            })
+        })
+
         // Append Elements to Respective Containers
         activityForm.append(activityLabel, activityInput, dateSelectionLabel, dateSelection, startTimeLabel, startTimeInput, endTimeLabel, endTimeInput, addButton);
         cardBody.append(cardTitle, activityForm);

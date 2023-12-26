@@ -1,3 +1,8 @@
+/*
+DATA STRUCTURE
+activity: {Day 1: [{}, {} ... {}], Day 2: [{}, {} ... {}] ... Day n: [{}, {} ... {}]};
+Day n: [{startTime: "12:00 PM", endTime: "10:00PM", description: "Description of activity"}, ... {}];
+ */
 class Trip {
     constructor(data= {}) {
         this.trip = {
@@ -70,10 +75,12 @@ class Trip {
         return this.trip.activity;
     }
 
-    set activity(value) {
-        this.trip.activity = value;
+    addActivity(key, value) {
+        this.trip.activity[key] = [...this.trip.activity[key], value];
+        this.trip.activity[key].sort((a,b) => {
+            return a.sortValue < b.sortValue ? -1 : 1;
+        })
     }
-
 
 }
 
