@@ -1,12 +1,13 @@
 // import TOKEN from "./config.js";
 import Landing from "./landing.js";
 import Itinerary from "./itinerary.js";
+import Trip from "./trip.js";
 
 // Declare global container
 let mainContainer;
 
 // Data
-let tripData = {};
+let tripData;
 
 document.addEventListener("DOMContentLoaded", init);
 
@@ -28,7 +29,8 @@ function init() {
     if (landing.render() === true) {
         document.querySelector('button#submit').addEventListener('click', () => {
             if (landing.formValidation() === true) {
-                tripData = landing.submit();
+                const data = landing.submit();
+                tripData = new Trip(data);
                 landing.destroy();
                 // console.log(data);
                 const itinerary = new Itinerary(mainContainer, tripData);

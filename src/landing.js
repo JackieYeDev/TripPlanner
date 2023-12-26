@@ -123,11 +123,17 @@ class Landing {
         const tripNameInput = document.querySelector('input#tripNameInput').value;
         const startDateInput = document.querySelector('input#startDateInput');
         const endDateInput = document.querySelector('input#endDateInput');
+        const duration = this.countNumberOfDays(startDateInput, endDateInput);
+        const activity = {};
+        for(let i = 0; i <= duration; i++) {
+            activity[i+1] = [];
+        }
         const tripData = {
-            tripNameInput: tripNameInput,
-            startDateInput: startDateInput.value,
-            endDateInput: endDateInput.value,
-            days: this.countNumberOfDays(startDateInput, endDateInput),
+            tripName: tripNameInput,
+            startDate: startDateInput.value,
+            endDate: endDateInput.value,
+            duration: duration,
+            activity: activity,
         }
         // For Debugging
         // console.log(json);

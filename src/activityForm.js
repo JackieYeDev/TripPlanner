@@ -1,6 +1,7 @@
 class ActivityForm {
-    constructor(container) {
+    constructor(container, tripData) {
         this.container = container;
+        this.tripData = tripData;
     }
 
     render() {
@@ -10,6 +11,8 @@ class ActivityForm {
         const activityForm = document.createElement('form');
         const activityLabel = document.createElement('label');
         const activityInput = document.createElement('input');
+        const dateSelectionLabel = document.createElement('label');
+        const dateSelection = document.createElement('select');
         const startTimeLabel = document.createElement('label');
         const startTimeInput = document.createElement('input');
         const endTimeLabel = document.createElement('label');
@@ -28,6 +31,8 @@ class ActivityForm {
         cardTitle.className = 'card-title';
         activityLabel.className = 'form-label';
         activityInput.className = 'form-control';
+        dateSelectionLabel.className = 'form-label';
+        dateSelection.className = 'form-select';
         startTimeLabel.className = 'form-label';
         startTimeInput.className = 'form-control';
         endTimeLabel.className = 'form-label';
@@ -36,6 +41,7 @@ class ActivityForm {
 
         // Assign id to Form Element(s)
         activityInput.id = 'activityInput';
+        dateSelection.id = 'dateSelection';
         startTimeInput.id = 'startTimeInput';
         endTimeInput.id = 'endTimeInput';
 
@@ -44,6 +50,13 @@ class ActivityForm {
         activityLabel.innerText = 'Activity:'
         activityLabel.type = 'text';
         activityInput.placeholder = 'Please input an activity description';
+        dateSelectionLabel.innerText = 'Please select which day of the activity';
+        Object.keys(this.tripData.activity).forEach((key) => {
+            const option = document.createElement('option');
+            option.value = key;
+            option.innerText = "Day " + key;
+            dateSelection.append(option);
+        })
         startTimeLabel.innerText = 'Start Time:';
         startTimeInput.type = 'time';
         startTimeInput.min = '00:00';
@@ -61,7 +74,7 @@ class ActivityForm {
         })
 
         // Append Elements to Respective Containers
-        activityForm.append(activityLabel, activityInput, startTimeLabel, startTimeInput, endTimeLabel, endTimeInput, addButton);
+        activityForm.append(activityLabel, activityInput, dateSelectionLabel, dateSelection, startTimeLabel, startTimeInput, endTimeLabel, endTimeInput, addButton);
         cardBody.append(cardTitle, activityForm);
         card.append(cardBody);
 

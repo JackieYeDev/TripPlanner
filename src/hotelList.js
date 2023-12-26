@@ -1,9 +1,10 @@
 class HotelList {
-    constructor(list) {
+    constructor(list, tripData) {
         this.list = list;
+        this.tripData = tripData;
     }
 
-    render() {
+    render(container) {
         if(this.list.length === 0) return "Unable to find hotel(s).";
 
         // Create HTML Element(s)
@@ -29,7 +30,9 @@ class HotelList {
 
             // Add event listener(s) to HTML Element(s)
             addButton.addEventListener('click', ()=>{
-
+                this.tripData.hotelName = item.name;
+                this.tripData.hotelAddress = item.location.formatted_address;
+                container.innerHTML = "";
             });
 
             // Append Elements to Respective Containers

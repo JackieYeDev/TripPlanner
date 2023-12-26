@@ -32,16 +32,16 @@ class Itinerary {
 
 
         // Assign properties to HTML ELement(s)
-        tripName.textContent = this.tripData.tripNameInput;
+        tripName.textContent = this.tripData.tripName;
 
         // Assign id to HTML Element(s)
 
         // Hotel Form
-        const hotelForm = new HotelForm(leftCardGroup);
+        const hotelForm = new HotelForm(leftCardGroup, this.tripData);
         hotelForm.render();
 
         // Activity Form
-        const activityForm = new ActivityForm(leftCardGroup);
+        const activityForm = new ActivityForm(leftCardGroup, this.tripData);
         activityForm.render();
 
         // Append Elements to Respective Containers

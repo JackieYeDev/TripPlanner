@@ -1,8 +1,9 @@
-import Modal from "./modal.js";
+import HotelModal from "./hotelModal.js";
 class HotelForm {
 
-    constructor(container) {
+    constructor(container, tripData) {
         this.container = container;
+        this.tripData = tripData;
     }
 
     render() {
@@ -13,16 +14,16 @@ class HotelForm {
         const hotelForm = document.createElement('form');
         const locationLabel = document.createElement('label');
         const locationInput = document.createElement('input');
-        const checkInDateLabel = document.createElement('label');
-        const checkInDateInput = document.createElement('input');
-        const checkOutDateLabel = document.createElement('label');
-        const checkOutDateInput = document.createElement('input');
+        // const checkInDateLabel = document.createElement('label');
+        // const checkInDateInput = document.createElement('input');
+        // const checkOutDateLabel = document.createElement('label');
+        // const checkOutDateInput = document.createElement('input');
         const searchButton = document.createElement('button');
 
         // Assign style(s) to HTML Element(s)
         cardBody.style = 'margin-bottom: 10;';
-        checkInDateLabel.style = 'margin-top: 12px;';
-        checkOutDateLabel.style = 'padding-top: 0px;margin-top: 12px;';
+        // checkInDateLabel.style = 'margin-top: 12px;';
+        // checkOutDateLabel.style = 'padding-top: 0px;margin-top: 12px;';
         searchButton.style = 'margin-top: 12px;';
 
         // Assign class name(s) to HTML Element(s)
@@ -31,26 +32,26 @@ class HotelForm {
         cardTitle.className = 'card-title';
         locationLabel.className = 'form-label';
         locationInput.className = 'form-control';
-        checkInDateLabel.className = 'form-label';
-        checkInDateInput.className = 'form-control';
-        checkOutDateLabel.className = 'form-label';
-        checkOutDateInput.className = 'form-control';
+        // checkInDateLabel.className = 'form-label';
+        // checkInDateInput.className = 'form-control';
+        // checkOutDateLabel.className = 'form-label';
+        // checkOutDateInput.className = 'form-control';
         searchButton.className = 'btn btn-primary d-block w-100';
 
         // Assign id to Form Element(s)
         locationInput.id = 'locationInput';
-        checkInDateInput.id = 'checkInDateInput';
-        checkOutDateInput.id = 'checkOutDateInput';
+        // checkInDateInput.id = 'checkInDateInput';
+        // checkOutDateInput.id = 'checkOutDateInput';
 
         // Assign properties to HTML ELement(s)
         cardTitle.innerText = 'Hotel Search by Location';
         locationLabel.innerText = 'Location:'
         locationInput.type = 'text';
         locationInput.placeholder = 'Please input a location';
-        checkInDateLabel.innerText = 'Check In Date:';
-        checkInDateInput.type = 'date';
-        checkOutDateLabel.innerText = 'Check Out Date:';
-        checkOutDateInput.type = 'date';
+        // checkInDateLabel.innerText = 'Check In Date:';
+        // checkInDateInput.type = 'date';
+        // checkOutDateLabel.innerText = 'Check Out Date:';
+        // checkOutDateInput.type = 'date';
         searchButton.type = 'button';
         searchButton.textContent = 'Search';
 
@@ -58,7 +59,7 @@ class HotelForm {
         searchButton.addEventListener('click', (e) => {
             this.queryHotels(locationInput.value)
                 .then((results) => {
-                    const modal = new Modal(results);
+                    const modal = new HotelModal(results, this.tripData);
                     modal.render("Hotel Result Search");
                 })
         })
@@ -69,7 +70,8 @@ class HotelForm {
 
 
         // Append Elements to Respective Containers
-        hotelForm.append(locationLabel, locationInput, checkInDateLabel, checkInDateInput, checkOutDateLabel, checkOutDateInput, searchButton);
+        hotelForm.append(locationLabel, locationInput, searchButton);
+        // hotelForm.append(locationLabel, locationInput, checkInDateLabel, checkInDateInput, checkOutDateLabel, checkOutDateInput, searchButton);
         cardBody.append(cardTitle, hotelForm);
         card.append(cardBody);
 
