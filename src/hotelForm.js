@@ -40,6 +40,7 @@ class HotelForm {
 
         // Assign id to Form Element(s)
         locationInput.id = 'locationInput';
+        searchButton.id = 'searchButton';
         // checkInDateInput.id = 'checkInDateInput';
         // checkOutDateInput.id = 'checkOutDateInput';
 

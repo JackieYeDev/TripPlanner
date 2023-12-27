@@ -30,6 +30,8 @@ class HotelList {
 
             // Add event listener(s) to HTML Element(s)
             addButton.addEventListener('click', ()=>{
+                const searchButton = document.getElementById('searchButton');
+                searchButton.attributes += 'disabled';
                 this.tripData.hotelName = item.name;
                 this.tripData.hotelAddress = item.location.formatted_address;
                 container.innerHTML = "";
