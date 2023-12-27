@@ -21,6 +21,7 @@ class ActivityForm {
 
         // Assign style(s) to HTML Element(s)
         cardBody.style = 'margin-bottom: 10;';
+        dateSelectionLabel.style = 'margin-top: 12px;';
         startTimeLabel.style = 'margin-top: 12px;';
         endTimeLabel.style = 'padding-top: 0px;margin-top: 12px;';
         addButton.style = 'margin-top: 12px;';
