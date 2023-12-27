@@ -24,7 +24,7 @@ class Itinerary {
         containerRowLayout.className = 'row d-flex justify-content-center';
         containerLeftColLayout.className = 'col-lg-5';
         containerCenterColLayout.className = 'col-lg-2';
-        containerRightColLayout.className = 'col-auto col-md-8 col-lg-5 col-xl-5 col-xxl-4';
+        containerRightColLayout.className = 'col-lg-5';
         leftCardGroup.className = 'card-group';
         rightCardGroup.className = 'card-group';
 
