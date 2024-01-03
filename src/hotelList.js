@@ -31,10 +31,11 @@ class HotelList {
             // Add event listener(s) to HTML Element(s)
             addButton.addEventListener('click', ()=>{
                 const searchButton = document.getElementById('searchButton');
-                searchButton.attributes += 'disabled';
+                searchButton.setAttribute('disabled', true);
                 this.tripData.hotelName = item.name;
                 this.tripData.hotelAddress = item.location.formatted_address;
                 container.innerHTML = "";
+                container.style = 'display: none;';
             });
 
             // Append Elements to Respective Containers

@@ -1,6 +1,7 @@
 import HotelForm from "./hotelForm.js";
 import ActivityForm from "./activityForm.js";
 import ActivityList from "./activityList.js";
+import HotelCard from "./hotelCard.js";
 
 class Itinerary {
     constructor(container, tripData) {
@@ -39,6 +40,10 @@ class Itinerary {
         tripName.textContent = this.tripData.tripName;
 
         // Assign id to HTML Element(s)
+
+        // Hotel Card
+        const hotelCard = new HotelCard(rightCardGroup, this.tripData);
+        hotelCard.render();
 
         // Activity List
         const activityList =  new ActivityList(rightCardGroup, this.tripData);
