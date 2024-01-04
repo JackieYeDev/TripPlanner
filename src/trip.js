@@ -44,6 +44,22 @@ class Trip {
         this.trip.endDate = value;
     }
 
+    get currentDay() {
+        return this.trip.currentDay;
+    }
+
+    set currentDay(value) {
+        this.trip.currentDay = value;
+    }
+
+    decrementCurrentDay() {
+        this.trip.currentDay -= 1;
+    }
+
+    incrementCurrentDay() {
+        this.trip.currentDay += 1;
+    }
+
     get duration() {
         return this.trip.duration;
     }
