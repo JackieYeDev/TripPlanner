@@ -9,12 +9,13 @@ class Trip {
             tripName: data.tripName || "",
             startDate: data.startDate ||"",
             endDate: data.endDate || "",
+            currentDay: data.currentDay || 1,
             duration: data.duration || 0,
             hotel: {
                 hotelName: data.hotelName || "",
                 hotelAddress: data.hotelAddress || "",
             },
-            activity: data.activity || {}
+            activity: data.activity || {},
         }
     }
 
