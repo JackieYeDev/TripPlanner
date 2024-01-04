@@ -132,7 +132,7 @@ class Landing {
             tripName: tripNameInput,
             startDate: startDateInput.value,
             endDate: endDateInput.value,
-            duration: duration,
+            duration: duration+1,
             activity: activity,
         }
         // For Debugging
