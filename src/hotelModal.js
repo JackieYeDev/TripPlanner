@@ -1,10 +1,11 @@
 import HotelList from "./hotelList.js";
 
 class HotelModal {
-    constructor(results, tripData) {
+    constructor(results, tripData, callback) {
         this.hotelModal = document.querySelector('div#hotel-modal');
         this.tripData = tripData;
         this.results = results;
+        this.callback = callback;
     }
     render(title = 'HotelModal Title') {
         // Create HTML Element(s)
@@ -17,7 +18,7 @@ class HotelModal {
         const modalBodyText = document.createElement('p');
         const closeButton = document.createElement('button');
         const closeButton2 = document.createElement('button');
-        const hotelList = new HotelList(this.results, this.tripData).render(this.hotelModal);
+        const hotelList = new HotelList(this.results, this.tripData, this.callback).render(this.hotelModal);
 
         // Assign class name(s) to HTML Element(s)
         modalDialog.className = 'modal-dialog';

@@ -1,7 +1,8 @@
 class HotelList {
-    constructor(list, tripData) {
+    constructor(list, tripData, callback) {
         this.list = list;
         this.tripData = tripData;
+        this.callback = callback;
     }
 
     render(container) {
@@ -36,6 +37,7 @@ class HotelList {
                 this.tripData.hotelAddress = item.location.formatted_address;
                 container.innerHTML = "";
                 container.style = 'display: none;';
+                this.callback();
             });
 
             // Append Elements to Respective Containers

@@ -44,17 +44,19 @@ class Itinerary {
         // Hotel Card
         const hotelCard = new HotelCard(rightCardGroup, this.tripData);
         hotelCard.render();
+        const updateHotelCard = hotelCard.registerCallback();
 
         // Activity List
         const activityList =  new ActivityList(rightCardGroup, this.tripData);
         activityList.render();
+        const updateActivityList = activityList.registerCallback()
 
         // Hotel Form
-        const hotelForm = new HotelForm(leftCardGroup, this.tripData);
+        const hotelForm = new HotelForm(leftCardGroup, this.tripData, updateHotelCard);
         hotelForm.render();
 
         // Activity Form
-        const activityForm = new ActivityForm(leftCardGroup, this.tripData);
+        const activityForm = new ActivityForm(leftCardGroup, this.tripData, updateActivityList);
         activityForm.render();
 
         // Append Elements to Respective Containers

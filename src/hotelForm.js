@@ -1,9 +1,10 @@
 import HotelModal from "./hotelModal.js";
 class HotelForm {
 
-    constructor(container, tripData) {
+    constructor(container, tripData, callback) {
         this.container = container;
         this.tripData = tripData;
+        this.callback = callback;
     }
 
     render() {
@@ -58,9 +59,10 @@ class HotelForm {
 
         // Add event listener(s) to HTML Element(s)
         searchButton.addEventListener('click', (e) => {
+            if(locationInput.value === "") return;
             this.queryHotels(locationInput.value)
                 .then((results) => {
-                    const modal = new HotelModal(results, this.tripData);
+                    const modal = new HotelModal(results, this.tripData, this.callback);
                     modal.render("Hotel Result Search");
                 })
         })

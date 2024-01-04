@@ -2,7 +2,6 @@ class ActivityList {
     constructor(container, tripData) {
         this.container = container;
         this.tripData = tripData;
-        this.currentDay = 1;
     }
 
     render() {
@@ -37,27 +36,21 @@ class ActivityList {
         // Assign id to HTML Element(s)
         tableContainer.id = 'activityTable';
 
-        // Assign properties to HTML ELement(s)
+        // Assign properties to HTML Element(s)
         cardTitle.innerText = 'Itinerary';
         leftChevronSpan.innerText = '«';
         rightChevronSpan.innerText = '»';
 
         // Add event listener(s) to HTML Element(s)
         leftChevronA.addEventListener('click', () => {
-            if(this.currentDay === 1) return;
-            this.currentDay -= 1;
-            const tableContainer = this.renderActivities(this.currentDay);
-            const activityTable = document.getElementById('activityTable');
-            activityTable.innerHTML = '';
-            activityTable.append(tableContainer);
+            if(this.tripData.currentDay() === 1) return;
+            this.tripData.decrementCurrentDay();
+            this.renderActivities();
         })
         rightChevronA.addEventListener('click', () => {
-            if(this.currentDay === this.tripData.duration) return;
-            this.currentDay += 1;
-            const tableContainer = this.renderActivities(this.currentDay);
-            const activityTable = document.getElementById('activityTable');
-            activityTable.innerHTML = '';
-            activityTable.append(tableContainer);
+            if(this.tripData.currentDay() === this.tripData.duration) return;
+            this.tripData.incrementCurrentDay();
+            this.renderActivities();
         })
 
         // Append Elements to Respective Containers
@@ -73,11 +66,8 @@ class ActivityList {
             a.className = 'page-link';
             span.innerText = `${i}`
             a.addEventListener('click', () => {
-                this.currentDay = i;
-                const tableContainer = this.renderActivities(this.currentDay);
-                const activityTable = document.getElementById('activityTable');
-                activityTable.innerHTML = '';
-                activityTable.append(tableContainer);
+                this.tripData.currentDay(i);
+                this.renderActivities();
             })
             li.append(a);
             a.append(span);
@@ -87,46 +77,53 @@ class ActivityList {
         rightChevronLi.append(rightChevronA);
         ul.append(rightChevronLi);
         paginationNav.append(ul);
-        tableContainer.append(this.renderActivities(this.currentDay));
         cardBody.append(cardTitle, tableContainer, paginationNav);
         card.append(cardBody);
         this.container.append(card);
     }
 
-    renderActivities(day = 1) {
-        if (this.tripData.activity[day].length === 0) return `There are no activities yet for Day ${day}.`;
-        const table = document.createElement('table');
-        const tableHeader = document.createElement('thead');
-        const headerRow = document.createElement('tr');
-        const timeHeader = document.createElement('th');
-        const descriptionHeader = document.createElement('th');
-        const tableBody = document.createElement('tbody');
+    renderActivities() {
+        const tableContainer = document.getElementById('activityTable');
+        tableContainer.innerHTML = '';
+        if (this.tripData.activity[this.tripData.currentDay()].length > 0) {
+            const table = document.createElement('table');
+            const tableHeader = document.createElement('thead');
+            const headerRow = document.createElement('tr');
+            const timeHeader = document.createElement('th');
+            const descriptionHeader = document.createElement('th');
+            const tableBody = document.createElement('tbody');
 
-        // Assign class name(s) to HTML Element(s)
-        table.className = 'table';
+            // Assign class name(s) to HTML Element(s)
+            table.className = 'table';
 
-        // Assign properties to HTML ELement(s)
-        timeHeader.innerText = 'Time';
-        descriptionHeader.innerText = 'Activity';
+            // Assign properties to HTML Element(s)
+            timeHeader.innerText = 'Time';
+            descriptionHeader.innerText = 'Activity';
 
-        this.tripData.activity[this.currentDay].forEach((item) => {
-            const tr = document.createElement('tr');
-            const timeTd = document.createElement('td');
-            const descriptionTd = document.createElement('td');
+            this.tripData.activity[this.tripData.currentDay()].forEach((item) => {
+                const tr = document.createElement('tr');
+                const timeTd = document.createElement('td');
+                const descriptionTd = document.createElement('td');
 
-            timeTd.innerText = `${item.startTime} to ${item.endTime}`;
-            descriptionTd.innerText = `${item.description}`;
+                timeTd.innerText = `${item.startTime} to ${item.endTime}`;
+                descriptionTd.innerText = `${item.description}`;
 
-            tr.append(timeTd, descriptionTd);
-            tableBody.append(tr);
-        })
+                tr.append(timeTd, descriptionTd);
+                tableBody.append(tr);
+            })
 
-        // Append Elements to Respective Containers
-        headerRow.append(timeHeader, descriptionHeader);
-        tableHeader.append(headerRow);
-        table.append(tableHeader, tableBody);
+            // Append Elements to Respective Containers
+            headerRow.append(timeHeader, descriptionHeader);
+            tableHeader.append(headerRow);
+            table.append(tableHeader, tableBody);
+            tableContainer.append(table);
+        } else {
+            tableContainer.append(`There are no activities yet for Day ${this.tripData.currentDay()}.`);
+        }
+    }
 
-        return table;
+    registerCallback() {
+        return this.renderActivities;
     }
 }
 

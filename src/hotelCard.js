@@ -48,6 +48,10 @@ class HotelCard {
         hotelDesc.innerText = this.tripData.hotel.hotelAddress == null ?
             "There is no hotel selected yet." : `${this.tripData.hotel.hotelAddress}`;
     }
+
+    registerCallback() {
+        return this.updateHotelCard;
+    }
 }
 
 export default HotelCard;

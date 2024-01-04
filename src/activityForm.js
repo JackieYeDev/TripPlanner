@@ -1,7 +1,8 @@
 class ActivityForm {
-    constructor(container, tripData) {
+    constructor(container, tripData, callback) {
         this.container = container;
         this.tripData = tripData;
+        this.callback = callback;
     }
 
     render() {
@@ -81,10 +82,21 @@ class ActivityForm {
                 description: activityInput.value,
                 sortValue: startTimeInput.valueAsNumber,
             })
+            this.tripData.currentDay = dateSelection.value;
+            this.callback();
         })
 
         // Append Elements to Respective Containers
-        activityForm.append(activityLabel, activityInput, dateSelectionLabel, dateSelection, startTimeLabel, startTimeInput, endTimeLabel, endTimeInput, addButton);
+        activityForm.append(
+            activityLabel,
+            activityInput,
+            dateSelectionLabel,
+            dateSelection,
+            startTimeLabel,
+            startTimeInput,
+            endTimeLabel,
+            endTimeInput,
+            addButton);
         cardBody.append(cardTitle, activityForm);
         card.append(cardBody);
 
