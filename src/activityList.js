@@ -43,12 +43,12 @@ class ActivityList {
 
         // Add event listener(s) to HTML Element(s)
         leftChevronA.addEventListener('click', () => {
-            if(this.tripData.currentDay() === 1) return;
+            if(this.tripData.currentDay === 1) return;
             this.tripData.decrementCurrentDay();
             this.renderActivities();
         })
         rightChevronA.addEventListener('click', () => {
-            if(this.tripData.currentDay() === this.tripData.duration) return;
+            if(this.tripData.currentDay === this.tripData.duration) return;
             this.tripData.incrementCurrentDay();
             this.renderActivities();
         })
@@ -66,7 +66,7 @@ class ActivityList {
             a.className = 'page-link';
             span.innerText = `${i}`
             a.addEventListener('click', () => {
-                this.tripData.currentDay(i);
+                this.tripData.currentDay = i;
                 this.renderActivities();
             })
             li.append(a);
@@ -85,7 +85,7 @@ class ActivityList {
     renderActivities() {
         const tableContainer = document.getElementById('activityTable');
         tableContainer.innerHTML = '';
-        if (this.tripData.activity[this.tripData.currentDay()].length > 0) {
+        if (this.tripData.activity[this.tripData.currentDay].length > 0) {
             const table = document.createElement('table');
             const tableHeader = document.createElement('thead');
             const headerRow = document.createElement('tr');
@@ -100,7 +100,7 @@ class ActivityList {
             timeHeader.innerText = 'Time';
             descriptionHeader.innerText = 'Activity';
 
-            this.tripData.activity[this.tripData.currentDay()].forEach((item) => {
+            this.tripData.activity[this.tripData.currentDay].forEach((item) => {
                 const tr = document.createElement('tr');
                 const timeTd = document.createElement('td');
                 const descriptionTd = document.createElement('td');
@@ -118,7 +118,7 @@ class ActivityList {
             table.append(tableHeader, tableBody);
             tableContainer.append(table);
         } else {
-            tableContainer.append(`There are no activities yet for Day ${this.tripData.currentDay()}.`);
+            tableContainer.append(`There are no activities yet for Day ${this.tripData.currentDay}.`);
         }
     }
 
